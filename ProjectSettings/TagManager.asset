@@ -9,6 +9,7 @@ TagManager:
   - Combine
   - Item
   - Bug
+  - BouncePad
   layers:
   - Default
   - TransparentFX

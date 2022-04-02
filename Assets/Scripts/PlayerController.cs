@@ -170,6 +170,9 @@ public class PlayerController :  MonoBehaviour
                 isJumping = false;
                 onGround = true;
             }
+        } else if (collision.gameObject.tag == "BouncePad")
+        {
+            Jump();
         }
     }
 
