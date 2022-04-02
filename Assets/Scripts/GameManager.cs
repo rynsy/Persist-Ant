@@ -9,9 +9,8 @@ public class GameManager : MonoBehaviour
 {
     public float levelStartDelay = 2f;						//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
-    
+
     private Text levelText;									//Text to display current level number.
-    private Text levelTime;									//Current Time
     private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
     
@@ -38,15 +37,19 @@ public class GameManager : MonoBehaviour
         //While doingSetup is true the player can't move, prevent player from moving while title card is up.
         doingSetup = true;
         //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
-
+        
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        levelTime = GameObject.Find("LevelTime").GetComponent<Text>();
 
         levelImage.SetActive(true);
-        Invoke("HideLevelImage", levelStartDelay);
+        Invoke("StartLevel", levelStartDelay);
     }
-    
+   
+    void StartLevel()
+    {
+        SoundManager.instance.EngageStress();
+        HideLevelImage();
+    }
     
     //Hides black image used between levels
     void HideLevelImage()

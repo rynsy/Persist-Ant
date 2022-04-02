@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelStartDelay: 2
-  playersTurn: 1
+  introMusic: {fileID: 8300000, guid: c0de8bd074c01f240a3321cc0564ece3, type: 3}
+  gameLoopMusic: {fileID: 8300000, guid: b080295121a5ef84ea7a0aca3b001bad, type: 3}

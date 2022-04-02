@@ -131,10 +131,10 @@ public class PlayerController :  MonoBehaviour
     private void GameOver()
     {
         //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
-        SoundManager.instance.PlaySingle(gameOverSound);
+        SoundManager.instance.PlaySingleSoundEffect(gameOverSound);
 
         //Stop the background music.
-        SoundManager.instance.musicSource.Stop();
+        SoundManager.instance.StopMusic();
 
         //Call the GameOver function of GameManager.
         GameManager.instance.GameOver();

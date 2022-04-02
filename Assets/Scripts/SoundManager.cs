@@ -4,7 +4,9 @@ using System.Collections;
 public class SoundManager : MonoBehaviour 
 {
     public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
-    public AudioSource musicSource;					//Drag a reference to the audio source which will play the music.
+    public AudioSource chillMusicSource;					//Drag a reference to the audio source which will play the music.
+    public AudioSource stressfulMusicSource;					//Drag a reference to the audio source which will play the music.
+
     public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
     public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
     public float highPitchRange = 1.05f;			//The highest a sound effect will be randomly pitched.
@@ -22,8 +24,21 @@ public class SoundManager : MonoBehaviour
         }
         DontDestroyOnLoad (gameObject);
     }
-    
-    public void PlaySingle(AudioClip clip)
+     
+    public void EngageStress()
+    {
+        chillMusicSource.loop = false;
+        chillMusicSource.Stop();
+        stressfulMusicSource.loop = true;
+        stressfulMusicSource.Play();
+    }
+
+    public void StopMusic()
+    {
+
+    }
+
+    public void PlaySingleSoundEffect(AudioClip clip)
     {
         efxSource.clip = clip;
         efxSource.Play ();
