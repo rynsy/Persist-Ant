@@ -16,7 +16,7 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private float chargeBoostCooldown = 5f;
 
     private Rigidbody2D rigidBodyComponent;
-    private float horizontalInput;
+    private Vector2 moveDir; 
     private int _time = 0;
     public int Time
     {
@@ -72,24 +72,24 @@ public class PlayerController :  MonoBehaviour
         {
             chargeKeyWasPressed = true;
         }
-        horizontalInput = Input.GetAxis("Horizontal");
+        moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
     private void FixedUpdate()
     {
         if (!isCharging)
         {
-            if (horizontalInput > 0)    // Player is facing right
+            if (moveDir.x > 0)    // Player is facing right
             {
                 animator.SetTrigger("playerFacingRight");
                 playerFacingRight = true;
             } 
-            else if (horizontalInput < 0) // Player is facing left 
+            else if (moveDir.x < 0) // Player is facing left 
             {
                 animator.SetTrigger("playerFacingLeft");
                 playerFacingRight = false;
             }
-            Move(new Vector2(horizontalInput * speed, rigidBodyComponent.velocity.y));
+            Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
         } 
         else
         {
@@ -157,10 +157,10 @@ public class PlayerController :  MonoBehaviour
     {
         if (playerFacingRight)
         {
-            Move(new Vector2(transform.right.x * speed * chargeBoostFactor, rigidBodyComponent.velocity.y));
+            Move(new Vector2(moveDir.x * speed * chargeBoostFactor, moveDir.y * speed * chargeBoostFactor));
         } else
         {
-            Move(new Vector2(-transform.right.x * speed * chargeBoostFactor, rigidBodyComponent.velocity.y));
+            Move(new Vector2(-moveDir.x * speed * chargeBoostFactor, moveDir.y * speed * chargeBoostFactor));
         }
     }
 
