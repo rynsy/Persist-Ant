@@ -410,6 +410,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+      propertyPath: chargeBoostCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+      propertyPath: chargeBoostDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
       propertyPath: blockingLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -1077,76 +1085,3 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1001 &2649737304617998365
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.0746117
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.5119004
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -27.5814
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591137, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591140, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_Name
-      value: SandTile
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591140, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591140, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_TagString
-      value: Platform
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591142, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_SortingLayer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2649737304329591142, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -967454167
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 726e1397d40883e41aee7dd0222d40d4, type: 3}

@@ -23,8 +23,16 @@ public class SandPlatform : MonoBehaviour
         // Call Coroutine to dissolve platform
         if (collision.gameObject.tag == "Player")
         {
-            SoundManager.instance.RandomizeSfx (dissolveSound1, dissolveSound2); 
-            InvokeRepeating("Dissolve", 0f, 0.5f);
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                SoundManager.instance.RandomizeSfx(dissolveSound1, dissolveSound2);
+                InvokeRepeating("Dissolve", 0f, 0.5f);
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                Destroy(gameObject); 
+            }
         }
     }
 

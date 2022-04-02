@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2649737304329591140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.0746117, y: 2.5119004, z: -27.5814}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1086939827
-  m_SortingLayer: 1
+  m_SortingLayerID: 2108986501
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 7032286342018686898, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dissolveSound1: {fileID: 8300000, guid: 300195885b9a30c42bb4b3a37b44e47f, type: 3}
   dissolveSound2: {fileID: 8300000, guid: 5d61565f93be8b74e809bc7a59355846, type: 3}
+  currentSprite: 0
   dissolveSprites:
   - {fileID: 6585698448916494241, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
   - {fileID: -6009560391128001592, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
