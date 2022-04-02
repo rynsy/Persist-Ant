@@ -7,7 +7,7 @@ using UnityEngine.UI;					//Allows us to use UI.
 
 public class GameManager : MonoBehaviour
 {
-    public float levelStartDelay = 2f;						//Time to wait before starting level, in seconds.
+    public float levelStartDelay = 0f;                      //TODO: Fix	//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
     private Text levelText;									//Text to display current level number.

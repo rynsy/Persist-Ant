@@ -6,6 +6,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
     public AudioSource chillMusicSource;					//Drag a reference to the audio source which will play the music.
     public AudioSource stressfulMusicSource;					//Drag a reference to the audio source which will play the music.
+    public AudioSource gameoverMusicSource;					//Drag a reference to the audio source which will play the music.
 
     public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
     public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
@@ -23,6 +24,9 @@ public class SoundManager : MonoBehaviour
             Destroy (gameObject);
         }
         DontDestroyOnLoad (gameObject);
+        
+        gameoverMusicSource.loop = false;
+        gameoverMusicSource.Stop();
     }
      
     public void EngageStress()
@@ -35,7 +39,18 @@ public class SoundManager : MonoBehaviour
 
     public void StopMusic()
     {
+        chillMusicSource.loop = false;
+        chillMusicSource.Stop();
 
+        stressfulMusicSource.loop = false;
+        stressfulMusicSource.Stop();
+    }
+
+    public void GameOver()
+    {
+        StopMusic();
+        gameoverMusicSource.loop = false;
+        gameoverMusicSource.Play();
     }
 
     public void PlaySingleSoundEffect(AudioClip clip)

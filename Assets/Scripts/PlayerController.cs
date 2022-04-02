@@ -8,15 +8,14 @@ public class PlayerController :  MonoBehaviour
 {
 
     [SerializeField] private int speed = 5;
-    [SerializeField] private int jumpHeight = 5;
     [SerializeField] private int speedBoostFactor = 2;
+    [SerializeField] private float jumpFactor = 5;
     [SerializeField] private float speedBoostDuration = 10f;
-
-
-
+    [SerializeField] private float chargeBoostFactor = 1.5f;
+    [SerializeField] private float chargeBoostDuration = 0.5f;
+    [SerializeField] private float chargeBoostCooldown = 5f;
 
     private Rigidbody2D rigidBodyComponent;
-    private bool jumpKeyWasPressed;
     private float horizontalInput;
     private int _time = 0;
     public int Time
@@ -31,14 +30,22 @@ public class PlayerController :  MonoBehaviour
             levelTime.text = "Time: " + _time;
         }
     }
-
+    
     public Text levelTime;
-
-    public AudioClip moveSound1;                //1 of 2 Audio clips to play when player moves.
-    public AudioClip moveSound2;                //2 of 2 Audio clips to play when player moves.
-    public AudioClip gameOverSound;             //Audio clip to play when player dies.
+    public AudioClip moveSound1;
 
     private Animator animator;                  //Used to store a reference to the Player's animator component.
+
+    public bool canJump = true;
+    public bool canCharge = true;
+
+    public bool isJumping = false;
+    public bool isCharging = false;
+    public bool onGround;
+
+    private bool jumpKeyWasPressed;
+    private bool chargeKeyWasPressed;
+    private bool playerFacingRight = true;
 
     //Start overrides the Start function of MovingObject
     protected void Start()
@@ -61,25 +68,50 @@ public class PlayerController :  MonoBehaviour
         {
             jumpKeyWasPressed = true;
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            chargeKeyWasPressed = true;
+        }
         horizontalInput = Input.GetAxis("Horizontal");
     }
 
     private void FixedUpdate()
     {
-        if (horizontalInput > 0)    // Player is facing right
+        if (!isCharging)
         {
-            animator.SetTrigger("playerFacingRight");
+            if (horizontalInput > 0)    // Player is facing right
+            {
+                animator.SetTrigger("playerFacingRight");
+                playerFacingRight = true;
+            } 
+            else if (horizontalInput < 0) // Player is facing left 
+            {
+                animator.SetTrigger("playerFacingLeft");
+                playerFacingRight = false;
+            }
+            Move(new Vector2(horizontalInput * speed, rigidBodyComponent.velocity.y));
         } 
-        else if (horizontalInput < 0) // Player is facing left 
+        else
         {
-            animator.SetTrigger("playerFacingLeft");
+            Charge();
         }
 
-        rigidBodyComponent.velocity = new Vector2(horizontalInput * speed, rigidBodyComponent.velocity.y);
-        if (jumpKeyWasPressed)
+        if (jumpKeyWasPressed && canJump)
         {
-            rigidBodyComponent.AddForce(transform.up * 5f, ForceMode2D.Impulse);
-            jumpKeyWasPressed = false;
+            Jump();                         // This sets jumpKeyPressed to false
+        } 
+        else
+        {
+            jumpKeyWasPressed = false;      // Need to be sure this gets reset. probably a cleaner way of writing this
+        }
+
+        if (chargeKeyWasPressed && canCharge)
+        {
+            StartCharge();
+        } 
+        else
+        {
+            chargeKeyWasPressed = false;
         }
 
         if (rigidBodyComponent.position.y < -10)
@@ -90,6 +122,54 @@ public class PlayerController :  MonoBehaviour
         Time += 1;
     }
 
+    private void Move(Vector2 dir)
+    {
+        rigidBodyComponent.velocity = dir;
+        //play move sound
+        if (onGround)
+        {
+            SoundManager.instance.PlaySingleSoundEffect(moveSound1);
+        }
+    }
+
+    private void Jump()
+    {
+        jumpKeyWasPressed = false;
+        isJumping = true;
+        canJump = false;
+        onGround = false;
+        Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * jumpFactor));
+    }
+
+    private void StartCharge()
+    {
+        chargeKeyWasPressed = false;
+        canCharge = false;
+        isCharging = true;
+        Invoke("RemoveChargeBoost", chargeBoostDuration);
+        Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
+    }
+
+    private void Charge()
+    {
+        if (playerFacingRight)
+        {
+            Move(new Vector2(transform.right.x * speed * chargeBoostFactor, rigidBodyComponent.velocity.y));
+        } else
+        {
+            Move(new Vector2(-transform.right.x * speed * chargeBoostFactor, rigidBodyComponent.velocity.y));
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Platform")
+        {
+            canJump = true;
+            isJumping = false;
+            onGround = true;
+        }    
+    }
 
     //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
     private void OnTriggerEnter2D(Collider2D other)
@@ -116,7 +196,15 @@ public class PlayerController :  MonoBehaviour
         speed /= speedBoostFactor;
     }
 
+    private void RemoveChargeBoost()
+    {
+        isCharging = false;
+    }
 
+    private void RemoveChargeBoostCooldown()
+    {
+        canCharge = true;
+    }
 
     //Restart reloads the scene when called.
     private void Restart()
@@ -126,17 +214,9 @@ public class PlayerController :  MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
-
-    //CheckIfGameOver checks if the player is out of food points and if so, ends the game.
     private void GameOver()
     {
-        //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
-        SoundManager.instance.PlaySingleSoundEffect(gameOverSound);
-
-        //Stop the background music.
-        SoundManager.instance.StopMusic();
-
-        //Call the GameOver function of GameManager.
+        SoundManager.instance.GameOver();
         GameManager.instance.GameOver();
     }
 }
