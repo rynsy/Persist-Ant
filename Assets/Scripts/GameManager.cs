@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         doingSetup = true;
         //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
         
-        levelImage = GameObject.Find("LevelImage");
+        levelImage = GameObject.Find("LevelStartImage");        //TODO: May need to change this to a parameter
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
         levelImage.SetActive(true);
