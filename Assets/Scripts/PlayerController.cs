@@ -179,12 +179,9 @@ public class PlayerController :  MonoBehaviour
     {
         if (collision.gameObject.tag == "Platform")
         {
-            if (transform.position.y > collision.gameObject.transform.position.y)
-            {
-                canJump = true;
-                isJumping = false;
-                onGround = true;
-            }
+            canJump = true;
+            isJumping = false;
+            onGround = true;
         } else if (collision.gameObject.tag == "BouncePad")
         {
             Jump();
