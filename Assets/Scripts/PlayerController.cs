@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 //Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 public class PlayerController :  MonoBehaviour
 {
+    public Camera playerCamera;
+    public FreeParallax parallax;
 
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int speed = 5;
@@ -148,7 +150,14 @@ public class PlayerController :  MonoBehaviour
         {
             SoundManager.instance.StopSoundEffects();
         }
+
         rigidBodyComponent.velocity = dir;
+        playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
+
+        if (parallax != null)
+        {
+            parallax.Speed = dir.x;
+        }
     }
 
     private void Jump()
