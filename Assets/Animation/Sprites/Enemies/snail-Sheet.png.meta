@@ -1,7 +1,37 @@
 fileFormatVersion: 2
 guid: 3a6e971d4fb3b894a9449b2b5078a515
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -7828191086085837653
+    second: snail-Sheet_0
+  - first:
+      213: -2729048404903050343
+    second: snail-Sheet_1
+  - first:
+      213: -3308242389796609098
+    second: snail-Sheet_2
+  - first:
+      213: 4791456637623642299
+    second: snail-Sheet_3
+  - first:
+      213: -828930375021011969
+    second: snail-Sheet_4
+  - first:
+      213: -2547719901898570564
+    second: snail-Sheet_5
+  - first:
+      213: 3032446144013797930
+    second: snail-Sheet_6
+  - first:
+      213: 8235330048691641468
+    second: snail-Sheet_7
+  - first:
+      213: -1572802419595791422
+    second: snail-Sheet_8
+  - first:
+      213: -4802861400674953479
+    second: snail-Sheet_9
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -41,7 +71,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -77,7 +107,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: snail-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bac69f7ceadac5390800000000000000
+      internalID: -7828191086085837653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99348e25fe8702ad0800000000000000
+      internalID: -2729048404903050343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b3a8450313c612d0800000000000000
+      internalID: -3308242389796609098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb8ae3afc6cae7240800000000000000
+      internalID: 4791456637623642299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffb575d373c0f74f0800000000000000
+      internalID: -828930375021011969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb484246f3ea4acd0800000000000000
+      internalID: -2547719901898570564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 1046
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2a027e83b9651a20800000000000000
+      internalID: 3032446144013797930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 1220
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7c9d50fb05c94270800000000000000
+      internalID: 8235330048691641468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1394
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c33e1e48884c2ae0800000000000000
+      internalID: -1572802419595791422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snail-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 1
+        width: 172
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f69553b00fc85db0800000000000000
+      internalID: -4802861400674953479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
