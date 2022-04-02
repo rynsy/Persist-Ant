@@ -634,6 +634,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2764723522050089778, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2764723522050089782, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
       propertyPath: m_Name
       value: Antlion
