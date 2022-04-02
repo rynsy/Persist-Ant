@@ -8,7 +8,7 @@ TagManager:
   - Enemy
   - Combine
   - Item
-  - SandPlatform
+  - Bug
   layers:
   - Default
   - TransparentFX
