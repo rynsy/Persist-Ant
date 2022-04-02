@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController :  MonoBehaviour
 {
 
+    [SerializeField] private int playerHealth = 3;
     [SerializeField] private int speed = 5;
     [SerializeField] private int speedBoostFactor = 2;
     [SerializeField] private float jumpFactor = 5;
@@ -27,11 +28,25 @@ public class PlayerController :  MonoBehaviour
         set
         {
             _time = value;
-            levelTime.text = "Time: " + _time;
+            levelTimeText.text = "Time: " + _time;
+        }
+    }
+
+    public int Health
+    {
+        get
+        {
+            return playerHealth;
+        }
+        set
+        {
+            playerHealth = value;
+            playerHealthText.text = "HEALTH: " + playerHealth;
         }
     }
     
-    public Text levelTime;
+    public Text levelTimeText;
+    public Text playerHealthText;
     public AudioClip moveSound1;
 
     private Animator animator;                  //Used to store a reference to the Player's animator component.
@@ -182,7 +197,11 @@ public class PlayerController :  MonoBehaviour
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
         {
-            GameOver();
+            Health -= 1;
+            if (Health <= 0)
+            {
+                GameOver();
+            }
         } else if (other.tag == "Item")
         {
             Destroy(other.gameObject);

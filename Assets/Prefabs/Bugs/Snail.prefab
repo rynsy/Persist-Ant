@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 671899884268046065}
   - component: {fileID: 671899884268046064}
   - component: {fileID: 671899884268046067}
+  - component: {fileID: 404982722}
   m_Layer: 6
   m_Name: Snail
   m_TagString: Bug
@@ -131,3 +132,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.72, y: 0.96}
   m_EdgeRadius: 0
+--- !u!114 &404982722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671899884268046071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f5dd6554f0fca4097df393a444ca1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bugSpeed: 0.2

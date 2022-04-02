@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class FlyController : MonoBehaviour
 {
-    private float counter = 0f;
-    private Rigidbody2D rigidbody;
+    private float counter;
+    private const float damp = 0.001f;
 
-    public int flySpeed = 2;
+
+    public float flySpeed = 0.5f;
+    public float bobFactor = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>(); 
+        counter = Random.Range(0, 2 * Mathf.PI);
     }
 
     // Update is called once per frame
@@ -23,8 +25,8 @@ public class FlyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbody.velocity = new Vector2(-transform.right.x * flySpeed , Mathf.Cos(counter));
-        counter += 1;
+        transform.position = new Vector2( transform.position.x + (damp * -1 * flySpeed) , transform.position.y + (bobFactor * Mathf.Cos(counter)));
+        counter += 0.1f;
         counter = counter % (2 * Mathf.PI);
     }
 }
