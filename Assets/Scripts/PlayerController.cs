@@ -124,12 +124,15 @@ public class PlayerController :  MonoBehaviour
 
     private void Move(Vector2 dir)
     {
-        rigidBodyComponent.velocity = dir;
         //play move sound
-        if (onGround)
+        if (onGround && rigidBodyComponent.velocity.x != dir.x)
         {
             SoundManager.instance.PlaySingleSoundEffect(moveSound1);
+        } else if (rigidBodyComponent.velocity.x == dir.x)
+        {
+            SoundManager.instance.StopSoundEffects();
         }
+        rigidBodyComponent.velocity = dir;
     }
 
     private void Jump()

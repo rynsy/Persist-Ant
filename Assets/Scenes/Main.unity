@@ -296,6 +296,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 120529518}
     - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+      propertyPath: moveSound1
+      value: 
+      objectReference: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
+    - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
       propertyPath: gameOverSound
       value: 
       objectReference: {fileID: 8300000, guid: 2694ae9d446687b43b5b70925f52d662, type: 3}
