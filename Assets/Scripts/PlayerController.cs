@@ -38,6 +38,7 @@ public class PlayerController :  MonoBehaviour
 
     public bool canJump = true;
     public bool canCharge = true;
+    private Vector2 chargeDir; 
 
     public bool isJumping = false;
     public bool isCharging = false;
@@ -149,29 +150,27 @@ public class PlayerController :  MonoBehaviour
         chargeKeyWasPressed = false;
         canCharge = false;
         isCharging = true;
+        chargeDir = moveDir;
         Invoke("RemoveChargeBoost", chargeBoostDuration);
         Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
     }
 
     private void Charge()
     {
-        if (playerFacingRight)
-        {
-            Move(new Vector2(moveDir.x * speed * chargeBoostFactor, moveDir.y * speed * chargeBoostFactor));
-        } else
-        {
-            Move(new Vector2(-moveDir.x * speed * chargeBoostFactor, moveDir.y * speed * chargeBoostFactor));
-        }
+        Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Platform")
         {
-            canJump = true;
-            isJumping = false;
-            onGround = true;
-        }    
+            if (transform.position.y > collision.gameObject.transform.position.y)
+            {
+                canJump = true;
+                isJumping = false;
+                onGround = true;
+            }
+        }
     }
 
     //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).

@@ -1016,6 +1016,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+      propertyPath: chargeBoostCooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+      propertyPath: chargeBoostDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
       propertyPath: blockingLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
