@@ -596,11 +596,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2764723522050089776, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.39
+      value: 10.55
       objectReference: {fileID: 0}
     - target: {fileID: 2764723522050089776, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.01
+      value: -3.04
       objectReference: {fileID: 0}
     - target: {fileID: 2764723522050089776, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
       propertyPath: m_LocalPosition.z
@@ -637,6 +637,10 @@ PrefabInstance:
     - target: {fileID: 2764723522050089782, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
       propertyPath: m_Name
       value: Antlion
+      objectReference: {fileID: 0}
+    - target: {fileID: 2764723522050089782, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55a7913431587f746ad4eb5dc3873553, type: 3}
