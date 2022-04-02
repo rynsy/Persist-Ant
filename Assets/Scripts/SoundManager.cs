@@ -49,8 +49,11 @@ public class SoundManager : MonoBehaviour
     public void GameOver()
     {
         StopMusic();
-        gameoverMusicSource.loop = false;
-        gameoverMusicSource.Play();
+        if (!gameoverMusicSource.isPlaying)
+        {
+            gameoverMusicSource.loop = false;
+            gameoverMusicSource.Play();
+        }
     }
 
     public void PlaySingleSoundEffect(AudioClip clip)
