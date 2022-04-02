@@ -1,34 +1,31 @@
 fileFormatVersion: 2
-guid: 120fd72b480155c41a96fcce437676cc
+guid: e12c24e9495afd34fb0ed76b1b7ea1cf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1809204192975888377
-    second: ant-die-right_0
+      213: -4872160738121563480
+    second: snaildie-Sheet - Copy_0
   - first:
-      213: 4021868852999872985
-    second: ant-die-right_1
+      213: -6034900871519022084
+    second: snaildie-Sheet - Copy_1
   - first:
-      213: -8663204530057956473
-    second: ant-die-right_2
+      213: -49836757607342688
+    second: snaildie-Sheet - Copy_2
   - first:
-      213: 2749130360190014087
-    second: ant-die-right_3
+      213: 351952905118541619
+    second: snaildie-Sheet - Copy_3
   - first:
-      213: 371719724749814494
-    second: ant-die-right_4
+      213: -6159303010994917555
+    second: snaildie-Sheet - Copy_4
   - first:
-      213: -432217721535000284
-    second: ant-die-right_5
+      213: 5038936174215581217
+    second: snaildie-Sheet - Copy_5
   - first:
-      213: -1645726784414326844
-    second: ant-die-right_6
+      213: -8041935198002098896
+    second: snaildie-Sheet - Copy_6
   - first:
-      213: -3017513747934200404
-    second: ant-die-right_7
-  - first:
-      213: 3535008475875983795
-    second: ant-die-right_8
+      213: -4255636839537556057
+    second: snaildie-Sheet - Copy_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -130,13 +127,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ant-die-right_0
+      name: snaildie-Sheet - Copy_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 87
-        height: 39
+        width: 174
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,41 +141,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 700668f3f5a64e6e0800000000000000
-      internalID: -1809204192975888377
+      spriteID: 8a2c8ab5f9b926cb0800000000000000
+      internalID: -4872160738121563480
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ant-die-right_1
-      rect:
-        serializedVersion: 2
-        x: 87
-        y: 0
-        width: 87
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d1e34cb96c80d730800000000000000
-      internalID: 4021868852999872985
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ant-die-right_2
+      name: snaildie-Sheet - Copy_1
       rect:
         serializedVersion: 2
         x: 174
         y: 0
-        width: 87
-        height: 39
+        width: 174
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,41 +162,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7833759216d16c780800000000000000
-      internalID: -8663204530057956473
+      spriteID: cf3d962b1a9bf3ca0800000000000000
+      internalID: -6034900871519022084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ant-die-right_3
-      rect:
-        serializedVersion: 2
-        x: 261
-        y: 0
-        width: 87
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7821e504f7fd62620800000000000000
-      internalID: 2749130360190014087
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ant-die-right_4
+      name: snaildie-Sheet - Copy_2
       rect:
         serializedVersion: 2
         x: 348
         y: 0
-        width: 87
-        height: 39
+        width: 174
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,41 +183,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: edaf7b5ce1d982500800000000000000
-      internalID: 371719724749814494
+      spriteID: 0ad9e06abb1fe4ff0800000000000000
+      internalID: -49836757607342688
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ant-die-right_5
-      rect:
-        serializedVersion: 2
-        x: 435
-        y: 0
-        width: 87
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4211742b544700af0800000000000000
-      internalID: -432217721535000284
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ant-die-right_6
+      name: snaildie-Sheet - Copy_3
       rect:
         serializedVersion: 2
         x: 522
         y: 0
-        width: 87
-        height: 39
+        width: 174
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -270,41 +204,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4cf53a185343929e0800000000000000
-      internalID: -1645726784414326844
+      spriteID: 337e14f6d4362e400800000000000000
+      internalID: 351952905118541619
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ant-die-right_7
-      rect:
-        serializedVersion: 2
-        x: 609
-        y: 0
-        width: 87
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cad3685db33af16d0800000000000000
-      internalID: -3017513747934200404
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ant-die-right_8
+      name: snaildie-Sheet - Copy_4
       rect:
         serializedVersion: 2
         x: 696
         y: 0
-        width: 87
-        height: 39
+        width: 174
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -312,8 +225,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b14592ca7fde0130800000000000000
-      internalID: 3535008475875983795
+      spriteID: d4f67ad7b82c58aa0800000000000000
+      internalID: -6159303010994917555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snaildie-Sheet - Copy_5
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 0
+        width: 174
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12e4cf5c0c5ede540800000000000000
+      internalID: 5038936174215581217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snaildie-Sheet - Copy_6
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 0
+        width: 174
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03dcf50ab8e456090800000000000000
+      internalID: -8041935198002098896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: snaildie-Sheet - Copy_7
+      rect:
+        serializedVersion: 2
+        x: 1218
+        y: 0
+        width: 174
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a54c4e77d0f0f4c0800000000000000
+      internalID: -4255636839537556057
       vertices: []
       indices: 
       edges: []
