@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Intro3.unity
     guid: 8cfc2c4cdbeccca4490b77ae45d78ecd
+  - enabled: 1
+    path: Assets/Scenes/_Dustin_LevelDesign.unity
+    guid: e1b9fb72a364574408374a0123216de7
   m_configObjects: {}
