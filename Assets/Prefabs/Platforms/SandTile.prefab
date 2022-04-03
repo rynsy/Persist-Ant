@@ -107,7 +107,7 @@ MonoBehaviour:
   - {fileID: -9096388097238917713, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
   - {fileID: -4419693959732901911, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
   - {fileID: 6092141333541965053, guid: 9fd4cb1c774c800438e7dc68c4dce5be, type: 3}
-  dissolveTime: 1.5
+  dissolveTime: 0.1
   dissolveDelay: 0
 --- !u!61 &3182323229624025525
 BoxCollider2D:
