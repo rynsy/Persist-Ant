@@ -5,6 +5,8 @@ using UnityEngine;
 public class ParallaxController : MonoBehaviour
 {
 
+    public float speed = 15.0f;
+
     public FreeParallax parallax;
 
     // Use this for initialization
@@ -20,11 +22,11 @@ public class ParallaxController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                parallax.Speed = 15.0f;
+                parallax.Speed = speed;
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                parallax.Speed = -15.0f;
+                parallax.Speed = -speed;
             }
             else
             {
