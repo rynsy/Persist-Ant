@@ -32,7 +32,7 @@ public class PlayerController :  MonoBehaviour
         set
         {
             _time = value;
-            levelTimeText.text = "Time: " + _time;
+           // levelTimeText.text = "Time: " + _time;
         }
     }
 
@@ -249,7 +249,12 @@ public class PlayerController :  MonoBehaviour
             Destroy(other.gameObject);
             ApplySpeedBoost();
         }
-
+        else if (other.tag == "HealthItem")
+        {
+            Debug.Log("I'm touching it");
+            Destroy(other.gameObject);
+            playerHealth += 1;
+        }
     }
 
     private void ApplySpeedBoost()

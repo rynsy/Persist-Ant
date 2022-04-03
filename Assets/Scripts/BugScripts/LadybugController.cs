@@ -15,6 +15,6 @@ public class LadybugController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbodyComponent.velocity = new Vector2(transform.right.x * bugSpeed , rigidbodyComponent.velocity.y);
+        //rigidbodyComponent.velocity = new Vector2(transform.right.x * bugSpeed , rigidbodyComponent.velocity.y);
     }
 }
