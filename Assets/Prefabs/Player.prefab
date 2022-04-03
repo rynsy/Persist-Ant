@@ -171,8 +171,8 @@ MonoBehaviour:
   jumpFactor: 5
   bouncePadJumpFactor: 10
   speedBoostDuration: 10
-  chargeBoostFactor: 1
-  chargeBoostDuration: 1
+  chargeBoostFactor: 2
+  chargeBoostDuration: 0.5
   chargeBoostCooldown: 0
   levelTimeText: {fileID: 0}
   playerHealthText: {fileID: 0}
