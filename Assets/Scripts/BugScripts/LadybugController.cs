@@ -8,6 +8,11 @@ public class LadybugController : MonoBehaviour
 
     public float bugSpeed = 1f;
 
+    private void Start()
+    {
+        rigidbodyComponent = GetComponent<Rigidbody2D>();
+    }
+
     private void FixedUpdate()
     {
         rigidbodyComponent.velocity = new Vector2(transform.right.x * bugSpeed , rigidbodyComponent.velocity.y);
