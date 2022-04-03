@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2108986501
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 0.9}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &5046652
 Rigidbody2D:
@@ -169,6 +169,7 @@ MonoBehaviour:
   speed: 5
   speedBoostFactor: 2
   jumpFactor: 5
+  bouncePadJumpFactor: 10
   speedBoostDuration: 10
   chargeBoostFactor: 1
   chargeBoostDuration: 1
@@ -178,6 +179,7 @@ MonoBehaviour:
   moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
   canJump: 1
   canCharge: 1
+  canMove: 1
   isJumping: 0
   isCharging: 0
   onGround: 0
