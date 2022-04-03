@@ -153,19 +153,6 @@ public class PlayerController :  MonoBehaviour
 
         rigidBodyComponent.velocity = dir;
         playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
-        if (parallax != null)
-        {
-            if (dir.x > 0)
-            {
-                parallax.Speed = 1;
-            } else if (dir.x < 0)
-            {
-                parallax.Speed = -1;
-            } else
-            {
-                parallax.Speed = 0;
-            }
-        }
     }
 
     private void Jump()
