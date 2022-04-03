@@ -16,15 +16,31 @@ public class WormController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Destroy(rigidbodyComponent);
-            animatorComponent.SetTrigger("die");
-        }
+
     }
     public void DestroyWorm()
     {
         Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Call Coroutine to dissolve platform
+        if (collision.gameObject.tag == "Player")
+        {
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                //SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
+                Debug.Log("Worm touch");
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                rigidbodyComponent.simulated = false;
+                animatorComponent.SetTrigger("die");
+                Debug.Log("Worm charge");
+            }
+        }
     }
 
     public void WiggleWorm()

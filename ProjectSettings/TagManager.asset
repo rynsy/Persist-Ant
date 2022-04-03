@@ -10,6 +10,7 @@ TagManager:
   - Item
   - Bug
   - BouncePad
+  - HealthItem
   layers:
   - Default
   - TransparentFX
