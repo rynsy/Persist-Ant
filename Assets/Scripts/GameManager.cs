@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 0f;                      //TODO: Fix	//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
-    private Text levelText;									//Text to display current level number.
-    private GameObject levelImage;							//Image to block out level as levels are being set up, background for levelText.
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
     
     void Awake()
@@ -34,14 +32,7 @@ public class GameManager : MonoBehaviour
     //Initializes the game for each level.
     void InitGame()
     {
-        //While doingSetup is true the player can't move, prevent player from moving while title card is up.
         doingSetup = true;
-        //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
-        
-       // levelImage = GameObject.Find("LevelStartImage");        //TODO: May need to change this to a parameter
-        //levelText = GameObject.Find("LevelText").GetComponent<Text>();
-
-        //levelImage.SetActive(true);
         Invoke("StartLevel", levelStartDelay);
     }
    
@@ -54,9 +45,6 @@ public class GameManager : MonoBehaviour
     //Hides black image used between levels
     void HideLevelImage()
     {
-        //Disable the levelImage gameObject.
-        //levelImage.SetActive(false);
-        //Set doingSetup to false allowing player to move again.
         doingSetup = false;
     }
     
@@ -75,11 +63,6 @@ public class GameManager : MonoBehaviour
     //GameOver is called when the player reaches 0 food points
     public void GameOver()
     {
-        //Set levelText to display number of levels passed and game over message
-//        levelText.text = "You fuckin died";
-        //Enable black background image gameObject.
- //       levelImage.SetActive(true);
-        //Disable this GameManager.
         enabled = false;
     }
     

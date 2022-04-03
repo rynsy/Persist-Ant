@@ -21,6 +21,7 @@ public class PlayerController :  MonoBehaviour
 
     private Rigidbody2D rigidBodyComponent;
     private Vector2 moveDir; 
+    private Vector2 prevMoveDir; 
     private int _time = 0;
     public int Time
     {
@@ -56,6 +57,7 @@ public class PlayerController :  MonoBehaviour
 
     public bool canJump = true;
     public bool canCharge = true;
+    public bool canMove = true;
     private Vector2 chargeDir; 
 
     public bool isJumping = false;
@@ -72,6 +74,11 @@ public class PlayerController :  MonoBehaviour
         //Get a component reference to the Player's animator component
         animator = GetComponent<Animator>();
         rigidBodyComponent = GetComponent<Rigidbody2D>();
+        playerFacingRight = true;
+        moveDir = Vector2.zero;
+        prevMoveDir = Vector2.zero;
+        animator.SetBool("playerIdle", true);
+        animator.SetBool("facingRight", playerFacingRight);
     }
 
 
@@ -96,58 +103,55 @@ public class PlayerController :  MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isCharging)
+        if (canMove)
         {
-            if (moveDir.x > 0)    // Player is facing right
+            if (!isCharging)
             {
-                animator.SetTrigger("playerRunRight");
-                playerFacingRight = true;
-            } 
-            else if (moveDir.x < 0) // Player is facing left 
-            {
-                animator.SetTrigger("playerRunLeft");
-                playerFacingRight = false;
-            } else
-            {
-                if (playerFacingRight)
+                playerFacingRight = (moveDir.x == 0 && playerFacingRight)
+                                        || (moveDir.x > 0);
+                animator.SetBool("facingRight", playerFacingRight);
+                if (moveDir.x != 0) // Player is moving in some direction
                 {
-                    animator.SetTrigger("playerFacingRight");
-                } else
-                {
-                    animator.SetTrigger("playerFacingLeft");
+                    animator.SetBool("playerIdle", false);
+                    animator.SetBool("playerRunning", true);
                 }
+                else
+                {
+                    animator.SetBool("playerIdle", true);
+                    animator.SetBool("playerRunning", false);
+                }
+                Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
             }
-            Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
-        } 
-        else
-        {
-            Charge();
-        }
+            else
+            {
+                Charge();
+            }
 
-        if (jumpKeyWasPressed && canJump)
-        {
-            Jump(jumpFactor);                         // This sets jumpKeyPressed to false
-        } 
-        else
-        {
-            jumpKeyWasPressed = false;      // Need to be sure this gets reset. probably a cleaner way of writing this
-        }
+            if (jumpKeyWasPressed && canJump)
+            {
+                Jump(jumpFactor);                         // This sets jumpKeyPressed to false
+            }
+            else
+            {
+                jumpKeyWasPressed = false;      // Need to be sure this gets reset. probably a cleaner way of writing this
+            }
 
-        if (chargeKeyWasPressed && canCharge)
-        {
-            StartCharge();
-        } 
-        else
-        {
-            chargeKeyWasPressed = false;
+            if (chargeKeyWasPressed && canCharge)
+            {
+                StartCharge();
+            }
+            else
+            {
+                chargeKeyWasPressed = false;
+            }
         }
-
         if (rigidBodyComponent.position.y < -10)
         {
             GameOver();
         }
 
         Time += 1;
+        prevMoveDir = moveDir;
     }
 
     private void Move(Vector2 dir)
@@ -186,13 +190,13 @@ public class PlayerController :  MonoBehaviour
 
     private void Charge()
     {
-        if (moveDir.x > 0)    // Player is facing right
+        if (playerFacingRight)    // Player is facing right
         {
-            animator.SetTrigger("playerChargeRight");
+            //animator.SetTrigger("playerChargeRight");
         } 
-        else if (moveDir.x < 0) // Player is facing left 
+        else  // Player is facing left 
         {
-            animator.SetTrigger("playerChargeLeft");
+            //animator.SetTrigger("playerChargeLeft");
         }
         Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
     }
@@ -218,16 +222,24 @@ public class PlayerController :  MonoBehaviour
         {
             if (moveDir.x > 0)    // Player is facing right
             {
-                animator.SetTrigger("playerHurtRight");
+                //animator.SetTrigger("playerHurtRight");
             } 
             else if (moveDir.x < 0) // Player is facing left 
             {
-                animator.SetTrigger("playerHurtLeft");
+                //animator.SetTrigger("playerHurtLeft");
             }
             Health -= 1;
             if (Health <= 0)
             {
-                animator.SetTrigger("playerDead");
+                canMove = false;
+                if (moveDir.x > 0)    // Player is facing right
+                {
+                    //animator.SetTrigger("playerDeadRight");
+                } 
+                else if (moveDir.x < 0) // Player is facing left 
+                {
+                    //animator.SetTrigger("playerDeadLeft");
+                }
                 Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
             }
         } else if (other.tag == "Item")

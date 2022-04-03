@@ -5,7 +5,7 @@ using UnityEngine;
 public class CombineController : MonoBehaviour
 {
     public float combineSpeed = 3f;
-    public float damp = 0.1f;
+    public float damp = 0.001f;
 
     private void FixedUpdate()
     {
