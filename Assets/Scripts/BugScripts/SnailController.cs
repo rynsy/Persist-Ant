@@ -29,7 +29,7 @@ public class SnailController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rigidbody.velocity = new Vector2(-transform.right.x * bugSpeed , rigidbody.velocity.y);
+        rigidbodyComponent.velocity = new Vector2(-transform.right.x * bugSpeed , rigidbodyComponent.velocity.y);
     }
     public void DestroySnail()
     {
