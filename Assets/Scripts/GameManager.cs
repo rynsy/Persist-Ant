@@ -38,10 +38,10 @@ public class GameManager : MonoBehaviour
         doingSetup = true;
         //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
         
-        levelImage = GameObject.Find("LevelStartImage");        //TODO: May need to change this to a parameter
-        levelText = GameObject.Find("LevelText").GetComponent<Text>();
+       // levelImage = GameObject.Find("LevelStartImage");        //TODO: May need to change this to a parameter
+        //levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
-        levelImage.SetActive(true);
+        //levelImage.SetActive(true);
         Invoke("StartLevel", levelStartDelay);
     }
    
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     void HideLevelImage()
     {
         //Disable the levelImage gameObject.
-        levelImage.SetActive(false);
+        //levelImage.SetActive(false);
         //Set doingSetup to false allowing player to move again.
         doingSetup = false;
     }
@@ -76,9 +76,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         //Set levelText to display number of levels passed and game over message
-        levelText.text = "You fuckin died";
+//        levelText.text = "You fuckin died";
         //Enable black background image gameObject.
-        levelImage.SetActive(true);
+ //       levelImage.SetActive(true);
         //Disable this GameManager.
         enabled = false;
     }

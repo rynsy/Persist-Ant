@@ -11,7 +11,9 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int speed = 5;
     [SerializeField] private int speedBoostFactor = 2;
-   // [SerializeField] private float jumpFactor = 5;
+    [SerializeField] private float jumpFactor = 5f;
+    [SerializeField] private float bouncePadJumpFactor = 10f;
+
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostFactor = 1.5f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
@@ -62,6 +64,7 @@ public class PlayerController :  MonoBehaviour
 
     private bool jumpKeyWasPressed;
     private bool chargeKeyWasPressed;
+    private bool playerFacingRight;
 
     //Start overrides the Start function of MovingObject
     protected void Start()
@@ -97,11 +100,22 @@ public class PlayerController :  MonoBehaviour
         {
             if (moveDir.x > 0)    // Player is facing right
             {
-                animator.SetTrigger("playerFacingRight");
+                animator.SetTrigger("playerRunRight");
+                playerFacingRight = true;
             } 
             else if (moveDir.x < 0) // Player is facing left 
             {
-                animator.SetTrigger("playerFacingLeft");
+                animator.SetTrigger("playerRunLeft");
+                playerFacingRight = false;
+            } else
+            {
+                if (playerFacingRight)
+                {
+                    animator.SetTrigger("playerFacingRight");
+                } else
+                {
+                    animator.SetTrigger("playerFacingLeft");
+                }
             }
             Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
         } 
@@ -112,7 +126,7 @@ public class PlayerController :  MonoBehaviour
 
         if (jumpKeyWasPressed && canJump)
         {
-            Jump(5);                         // This sets jumpKeyPressed to false
+            Jump(jumpFactor);                         // This sets jumpKeyPressed to false
         } 
         else
         {
@@ -151,13 +165,13 @@ public class PlayerController :  MonoBehaviour
         playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
     }
 
-    private void Jump(int jumpFactor)
+    private void Jump(float j)
     {
         jumpKeyWasPressed = false;
         isJumping = true;
         canJump = false;
         onGround = false;
-        Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * jumpFactor));
+        Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * j));
     }
 
     private void StartCharge()
@@ -172,6 +186,14 @@ public class PlayerController :  MonoBehaviour
 
     private void Charge()
     {
+        if (moveDir.x > 0)    // Player is facing right
+        {
+            animator.SetTrigger("playerChargeRight");
+        } 
+        else if (moveDir.x < 0) // Player is facing left 
+        {
+            animator.SetTrigger("playerChargeLeft");
+        }
         Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
     }
 
@@ -184,7 +206,7 @@ public class PlayerController :  MonoBehaviour
             onGround = true;
         } else if (collision.gameObject.tag == "BouncePad")
         {
-            Jump(10);
+            Jump(bouncePadJumpFactor);
         }
     }
 
@@ -194,10 +216,19 @@ public class PlayerController :  MonoBehaviour
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
         {
+            if (moveDir.x > 0)    // Player is facing right
+            {
+                animator.SetTrigger("playerHurtRight");
+            } 
+            else if (moveDir.x < 0) // Player is facing left 
+            {
+                animator.SetTrigger("playerHurtLeft");
+            }
             Health -= 1;
             if (Health <= 0)
             {
-                GameOver();
+                animator.SetTrigger("playerDead");
+                Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
             }
         } else if (other.tag == "Item")
         {
@@ -237,7 +268,6 @@ public class PlayerController :  MonoBehaviour
 
     private void GameOver()
     {
-
         SoundManager.instance.GameOver();
         GameManager.instance.GameOver();
     }

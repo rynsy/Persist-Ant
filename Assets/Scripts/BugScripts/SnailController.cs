@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class SnailController : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody2D rigidbody;
+    private Animator animatorComponent;
+    private Rigidbody2D rigidbodyComponent;
+    public AudioClip snailDeathSound; 
     public float timeToDie;
 
     public float bugSpeed = 0.2f;
@@ -14,23 +15,32 @@ public class SnailController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Destroy(rigidbody);
-            animator.SetTrigger("snailDead");
-        }
+        animatorComponent = GetComponent<Animator>();
+        rigidbodyComponent = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
     {
-        rigidbody.velocity = new Vector2(-transform.right.x * bugSpeed, rigidbody.velocity.y);
+        rigidbodyComponent.velocity = new Vector2(-transform.right.x * bugSpeed, rigidbodyComponent.velocity.y);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Call Coroutine to dissolve platform
+        if (collision.gameObject.tag == "Player")
+        {
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                rigidbodyComponent.simulated = false;
+                animatorComponent.SetTrigger("snailDead");
+            }
+        }
+    }
+
     public void DestroySnail()
     {
         Destroy(gameObject);
