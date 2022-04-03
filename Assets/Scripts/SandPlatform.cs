@@ -10,8 +10,8 @@ public class SandPlatform : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Sprite[] dissolveSprites;
 
-    public float dissolveTime;    
-    public float dissolveDelay;    
+    public float dissolveTime = 0.12f;
+    public float dissolveDelay = 0f;    
 
     void Awake ()
     {
@@ -26,7 +26,7 @@ public class SandPlatform : MonoBehaviour
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.RandomizeSfx(dissolveSound1, dissolveSound2);
-                InvokeRepeating("Dissolve", 0f, .12f);
+                InvokeRepeating("Dissolve", dissolveDelay, dissolveTime);
             }
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
