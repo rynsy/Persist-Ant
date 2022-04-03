@@ -30,11 +30,11 @@ public class FlyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = new Vector2( transform.position.x + (damp * -1 * flySpeed) , transform.position.y + (bobFactor * Mathf.Cos(counter)));
+        transform.position = new Vector2(transform.position.x + (damp * -1 * flySpeed), transform.position.y + (bobFactor * Mathf.Cos(counter)));
         counter += 0.1f;
         counter = counter % (2 * Mathf.PI);
     }
-    
+
     public void DestroyFly()
     {
         Destroy(gameObject);

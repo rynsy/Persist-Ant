@@ -15,7 +15,7 @@ public class SnailController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody2D>(); 
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -29,7 +29,7 @@ public class SnailController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rigidbodyComponent.velocity = new Vector2(-transform.right.x * bugSpeed , rigidbodyComponent.velocity.y);
+        rigidbody.velocity = new Vector2(-transform.right.x * bugSpeed, rigidbody.velocity.y);
     }
     public void DestroySnail()
     {
