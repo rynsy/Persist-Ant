@@ -54,6 +54,7 @@ public class PlayerController :  MonoBehaviour
     public AudioClip moveSound1;
 
     private Animator animator;                  //Used to store a reference to the Player's animator component.
+    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
 
     public bool canJump = true;
     public bool canCharge = true;
@@ -66,7 +67,19 @@ public class PlayerController :  MonoBehaviour
 
     private bool jumpKeyWasPressed;
     private bool chargeKeyWasPressed;
-    private bool playerFacingRight;
+    private bool _facingRight;
+    public bool PlayerFacingRight
+    {
+        get
+        {
+            return _facingRight;
+        }
+        set
+        {
+            _facingRight = value;
+            animator.SetBool("facingRight", _facingRight);
+        }
+    }
 
     //Start overrides the Start function of MovingObject
     protected void Start()
@@ -74,11 +87,10 @@ public class PlayerController :  MonoBehaviour
         //Get a component reference to the Player's animator component
         animator = GetComponent<Animator>();
         rigidBodyComponent = GetComponent<Rigidbody2D>();
-        playerFacingRight = true;
+        PlayerFacingRight = true;
         moveDir = Vector2.zero;
         prevMoveDir = Vector2.zero;
         animator.SetBool("playerIdle", true);
-        animator.SetBool("facingRight", playerFacingRight);
     }
 
 
@@ -101,24 +113,33 @@ public class PlayerController :  MonoBehaviour
         moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
+    
+    private void SwitchAnimation(string param)
+    {
+        foreach (string s in animationParameters)
+        {
+            animator.SetBool(s, false);
+        }
+        animator.SetBool(param, true);
+    }
+
+
     private void FixedUpdate()
     {
         if (canMove)
         {
             if (!isCharging)
             {
-                playerFacingRight = (moveDir.x == 0 && playerFacingRight)
+                PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
                                         || (moveDir.x > 0);
-                animator.SetBool("facingRight", playerFacingRight);
+                animator.SetBool("facingRight", PlayerFacingRight);
                 if (moveDir.x != 0) // Player is moving in some direction
                 {
-                    animator.SetBool("playerIdle", false);
-                    animator.SetBool("playerRunning", true);
+                    SwitchAnimation("run");
                 }
                 else
                 {
-                    animator.SetBool("playerIdle", true);
-                    animator.SetBool("playerRunning", false);
+                    SwitchAnimation("idle");
                 }
                 Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
             }
@@ -175,6 +196,7 @@ public class PlayerController :  MonoBehaviour
         isJumping = true;
         canJump = false;
         onGround = false;
+        SwitchAnimation("jump");
         Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * j));
     }
 
@@ -190,14 +212,7 @@ public class PlayerController :  MonoBehaviour
 
     private void Charge()
     {
-        if (playerFacingRight)    // Player is facing right
-        {
-            //animator.SetTrigger("playerChargeRight");
-        } 
-        else  // Player is facing left 
-        {
-            //animator.SetTrigger("playerChargeLeft");
-        }
+        SwitchAnimation("charge");
         Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
     }
 
@@ -208,6 +223,7 @@ public class PlayerController :  MonoBehaviour
             canJump = true;
             isJumping = false;
             onGround = true;
+            SwitchAnimation("idle");            //TODO: Need to experiment with this
         } else if (collision.gameObject.tag == "BouncePad")
         {
             Jump(bouncePadJumpFactor);
@@ -220,26 +236,12 @@ public class PlayerController :  MonoBehaviour
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
         {
-            if (moveDir.x > 0)    // Player is facing right
-            {
-                //animator.SetTrigger("playerHurtRight");
-            } 
-            else if (moveDir.x < 0) // Player is facing left 
-            {
-                //animator.SetTrigger("playerHurtLeft");
-            }
+            SwitchAnimation("hurt");
             Health -= 1;
             if (Health <= 0)
             {
                 canMove = false;
-                if (moveDir.x > 0)    // Player is facing right
-                {
-                    //animator.SetTrigger("playerDeadRight");
-                } 
-                else if (moveDir.x < 0) // Player is facing left 
-                {
-                    //animator.SetTrigger("playerDeadLeft");
-                }
+                SwitchAnimation("die");
                 Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
             }
         } else if (other.tag == "Item")
