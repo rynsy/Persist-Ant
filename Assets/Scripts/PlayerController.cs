@@ -254,6 +254,7 @@ public class PlayerController :  MonoBehaviour
 
     private void GameOver()
     {
+
         SoundManager.instance.GameOver();
         GameManager.instance.GameOver();
     }

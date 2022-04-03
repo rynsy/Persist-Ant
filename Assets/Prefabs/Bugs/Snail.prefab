@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 671899884268046064}
   - component: {fileID: 671899884268046067}
   - component: {fileID: 404982722}
+  - component: {fileID: -7285754059888310781}
   m_Layer: 6
   m_Name: Snail
   m_TagString: Bug
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2108986501
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -7828191086085837653, guid: 3a6e971d4fb3b894a9449b2b5078a515, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -145,3 +146,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bugSpeed: 0.2
+--- !u!95 &-7285754059888310781
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671899884268046071}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a2c93df7662154478b17212f9334624, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
