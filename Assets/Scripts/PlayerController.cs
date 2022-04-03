@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class PlayerController :  MonoBehaviour
 {
     public Camera playerCamera;
-    public FreeParallax parallax;
 
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int speed = 5;
@@ -63,7 +62,6 @@ public class PlayerController :  MonoBehaviour
 
     private bool jumpKeyWasPressed;
     private bool chargeKeyWasPressed;
-    private bool playerFacingRight = true;
 
     //Start overrides the Start function of MovingObject
     protected void Start()
@@ -100,12 +98,10 @@ public class PlayerController :  MonoBehaviour
             if (moveDir.x > 0)    // Player is facing right
             {
                 animator.SetTrigger("playerFacingRight");
-                playerFacingRight = true;
             } 
             else if (moveDir.x < 0) // Player is facing left 
             {
                 animator.SetTrigger("playerFacingLeft");
-                playerFacingRight = false;
             }
             Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
         } 
