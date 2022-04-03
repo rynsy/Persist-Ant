@@ -26,7 +26,7 @@ public class SandPlatform : MonoBehaviour
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.RandomizeSfx(dissolveSound1, dissolveSound2);
-                InvokeRepeating("Dissolve", 0f, 0.5f);
+                InvokeRepeating("Dissolve", 0f, .12f);
             }
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
