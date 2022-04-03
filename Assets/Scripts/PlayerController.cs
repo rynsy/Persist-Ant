@@ -11,7 +11,7 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int speed = 5;
     [SerializeField] private int speedBoostFactor = 2;
-    [SerializeField] private float jumpFactor = 5;
+   // [SerializeField] private float jumpFactor = 5;
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostFactor = 1.5f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
@@ -112,7 +112,7 @@ public class PlayerController :  MonoBehaviour
 
         if (jumpKeyWasPressed && canJump)
         {
-            Jump();                         // This sets jumpKeyPressed to false
+            Jump(5);                         // This sets jumpKeyPressed to false
         } 
         else
         {
@@ -151,7 +151,7 @@ public class PlayerController :  MonoBehaviour
         playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
     }
 
-    private void Jump()
+    private void Jump(int jumpFactor)
     {
         jumpKeyWasPressed = false;
         isJumping = true;
@@ -184,7 +184,7 @@ public class PlayerController :  MonoBehaviour
             onGround = true;
         } else if (collision.gameObject.tag == "BouncePad")
         {
-            Jump();
+            Jump(10);
         }
     }
 
