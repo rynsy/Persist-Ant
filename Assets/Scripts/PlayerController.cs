@@ -222,11 +222,11 @@ public class PlayerController :  MonoBehaviour
         {
             if (!isCharging)
             {
-                TakeDamage(GetCollisionDirection(other));
+                TakeDamage();
             }
         } else if (other.tag == "Spike")
         {
-            TakeDamage(GetCollisionDirection(other));
+            TakeDamage();
         } else if (other.tag == "Item")
         {
             SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
@@ -240,21 +240,6 @@ public class PlayerController :  MonoBehaviour
             Health += 1;
         }
     }
-
-    private Vector2 GetCollisionDirection(Collider2D other)
-    {
-        Vector2 bounceBackDir;
-        if (other.transform.position.x >= transform.position.x)
-        {   // enemy is on the right
-            bounceBackDir = new Vector2(-1 * bounceBackForce, bounceBackForce * 2);
-        } else
-        {
-            bounceBackDir = new Vector2(1 * bounceBackForce, bounceBackForce * 2);
-        }
-        Debug.Log("BounceBack Direction: " + bounceBackDir);
-        return bounceBackDir;
-    }
-
 
     private void Move(Vector2 dir, bool playWalkSound)
     {
@@ -516,15 +501,12 @@ public class PlayerController :  MonoBehaviour
 
     }
 
-
-    private void TakeDamage(Vector2 bounceBackDir)
+    private void TakeDamage()
     {
         SwitchAnimation("hurt");
         isTakingDamage = true;
         SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
         Health -= 1;
-
-        Move(bounceBackDir, false);
 
         if (Health <= 0)
         {

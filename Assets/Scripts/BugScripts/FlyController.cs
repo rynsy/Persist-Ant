@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FlyController : MonoBehaviour
@@ -36,23 +34,25 @@ public class FlyController : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         // Call Coroutine to dissolve platform
-        if (collision.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            Debug.Log("Fly has touched player");
+            if (other.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
+                animatorComponent.SetTrigger("FlyDead");
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;
                 SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
                 animatorComponent.SetTrigger("FlyDead");
             }
-        } else if (collision.gameObject.tag == "Combine")
+        } else if (other.gameObject.tag == "Combine")
         {
             rigidbodyComponent.simulated = false;
             SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
