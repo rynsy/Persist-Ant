@@ -49,6 +49,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("StartMenu");
     }
 
+    public void StartCredits()
+    {
+        SceneManager.LoadScene("Credits");
+    }
+
     public void StartIntro()
     {
         SceneManager.LoadScene("Intro");
