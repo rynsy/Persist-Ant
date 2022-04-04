@@ -32,7 +32,7 @@ public class PlayerController :  MonoBehaviour
         set
         {
             _time = value;
-           // levelTimeText.text = "Time: " + _time;
+            //TODO: remove time
         }
     }
 
@@ -45,7 +45,7 @@ public class PlayerController :  MonoBehaviour
         set
         {
             playerHealth = value;
-            playerHealthText.text = "HEALTH: " + playerHealth;      //NOTE: 
+            UpdateHealthDisplay();
         }
     }
     
@@ -287,6 +287,11 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoostCooldown()
     {
         canCharge = true;
+    }
+
+    private void UpdateHealthDisplay()
+    {
+        //TODO: Change the health display to have current value of Health
     }
 
     //Restart reloads the scene when called.

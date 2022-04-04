@@ -6,11 +6,13 @@ public class FlyController : MonoBehaviour
 {
     private float counter;
     private const float damp = 0.001f;
+
+    private GameObject player;
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
-    public AudioClip flyDeathSound; 
+    public AudioClip flyDeathSound;
 
-
+    public float motionTriggerRadius;
     public float flySpeed = 0.5f;
     public float bobFactor = 1f;
 
@@ -19,14 +21,18 @@ public class FlyController : MonoBehaviour
     {
         animatorComponent = GetComponent<Animator>();
         rigidbodyComponent = GetComponent<Rigidbody2D>();
+        player = GameObject.Find("Player");
         counter = Random.Range(0, 2 * Mathf.PI);
     }
     
     private void FixedUpdate()
     {
-        transform.position = new Vector2(transform.position.x + (damp * -1 * flySpeed), transform.position.y + (bobFactor * Mathf.Cos(counter)));
-        counter += 0.1f;
-        counter = counter % (2 * Mathf.PI);
+        if ((player.transform.position - transform.position).sqrMagnitude < (Mathf.Pow(motionTriggerRadius, 2)))
+        {
+            transform.position = new Vector2(transform.position.x + (damp * -1 * flySpeed), transform.position.y + (bobFactor * Mathf.Cos(counter)));
+            counter += 0.1f;
+            counter = counter % (2 * Mathf.PI);
+        }
     }
 
     // Update is called once per frame

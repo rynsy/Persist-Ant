@@ -5,15 +5,27 @@ using UnityEngine;
 
 public class WormController : MonoBehaviour
 {
+    private GameObject player;
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
     public AudioClip wormDeathSound; 
+    
+    public float motionTriggerRadius;
 
     void Start()
     {
+        player = GameObject.Find("Player");
         animatorComponent = GetComponent<Animator>();
         rigidbodyComponent = GetComponent<Rigidbody2D>();
     }
+    private void FixedUpdate()
+    {
+        if ((player.transform.position - transform.position).sqrMagnitude < (Mathf.Pow(motionTriggerRadius, 2)))
+        {
+            animatorComponent.SetTrigger("wiggle");
+        }
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -31,14 +43,6 @@ public class WormController : MonoBehaviour
                 SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
                 animatorComponent.SetTrigger("die");
             }
-        }
-    }
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Player")
-        {
-            //arise worm
-            animatorComponent.SetTrigger("wiggle");
         }
     }
     public void DestroyWorm()

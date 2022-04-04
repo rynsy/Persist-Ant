@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flyDeathSound: {fileID: 0}
+  motionTriggerRadius: 10
   flySpeed: 28
   bobFactor: 0.01
 --- !u!50 &6890403490717920320

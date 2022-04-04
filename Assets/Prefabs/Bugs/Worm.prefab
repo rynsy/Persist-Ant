@@ -138,8 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f239588a6fe6b64fa02037aac43baef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToDie: 0
-  bugSpeed: 0.2
+  wormDeathSound: {fileID: 0}
+  motionTriggerRadius: 5
 --- !u!61 &1408165279728846515
 BoxCollider2D:
   m_ObjectHideFlags: 0
