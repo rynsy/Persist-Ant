@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController :  MonoBehaviour
 {
     public Camera playerCamera;
+    public Camera cameraPrefab;
 
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int playerSpeed = 5;
