@@ -8,6 +8,7 @@ using System;
 public class PlayerController :  MonoBehaviour
 {
     public Camera playerCamera;
+    public ParticleSystem dust;
 
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int playerSpeed = 5;
@@ -223,9 +224,12 @@ public class PlayerController :  MonoBehaviour
         if (onGround && rigidBodyComponent.velocity.x != dir.x)
         {
             SoundManager.instance.PlayWalkSound(moveSound1);
-        } else if (rigidBodyComponent.velocity.x == dir.x)
+            dust.Play();
+        } 
+        else if (rigidBodyComponent.velocity.x == dir.x)
         {
             SoundManager.instance.StopWalkSound();
+            dust.Stop();
         }
 
         UpdateParallax();
@@ -327,6 +331,7 @@ public class PlayerController :  MonoBehaviour
 
         animator.SetBool(param, true);
     }
+
 
     private void TakeDamage()
     {
