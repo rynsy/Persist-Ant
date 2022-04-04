@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip mainMenuMusic;
     public AudioClip chillMusic;
+    public AudioClip creditsMusic;
     public AudioClip stressMusicIntro;
     public AudioClip stressMusicMainLoop;
     public AudioClip gameOverSound;
@@ -86,6 +87,12 @@ public class SoundManager : MonoBehaviour
     {
         StopMusic();
         musicSource.PlayOneShot(gameOverSound);
+    }
+
+    public void Credits()
+    {
+        StopMusic();
+        musicSource.PlayOneShot(creditsMusic);
     }
 
     public void PlaySingleSoundEffect(AudioClip clip)

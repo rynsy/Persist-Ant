@@ -51,6 +51,7 @@ MonoBehaviour:
   musicSource: {fileID: 860492449674351258}
   mainMenuMusic: {fileID: 8300000, guid: 2a6c1011c8b80f2489b3c4e25330615d, type: 3}
   chillMusic: {fileID: 8300000, guid: c0de8bd074c01f240a3321cc0564ece3, type: 3}
+  creditsMusic: {fileID: 8300000, guid: f1c1e4f60db412b4f9aa7e16beda082e, type: 3}
   stressMusicIntro: {fileID: 8300000, guid: 82df9a588fa328645846f1fd52415992, type: 3}
   stressMusicMainLoop: {fileID: 8300000, guid: b080295121a5ef84ea7a0aca3b001bad, type: 3}
   gameOverSound: {fileID: 8300000, guid: 6865d9a5e2bccb44293c1c74237505ec, type: 3}
