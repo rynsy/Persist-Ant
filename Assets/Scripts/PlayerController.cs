@@ -49,6 +49,7 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private float chargeBoostDuration = 0.5f;
     [SerializeField] private float chargeBoostCooldown = 5f;
     [SerializeField] private float parallaxSpeed;
+    [SerializeField] private float chargingMass;
 
     // Slope/collision resolution parameters
     [SerializeField] private float groundCheckRadius;
@@ -63,6 +64,7 @@ public class PlayerController :  MonoBehaviour
     private float slopeSideAngle;
     private float lastSlopeAngle;
     private float oldGravityScale;
+    private float oldMass;
 
     private Vector2 newVelocity; 
     private Vector2 newForce; 
@@ -401,7 +403,9 @@ public class PlayerController :  MonoBehaviour
             newVelocity.Set(0.0f, 0.0f);
             rigidBodyComponent.velocity = newVelocity;
             oldGravityScale = rigidBodyComponent.gravityScale;
+            oldMass = rigidBodyComponent.mass;
             rigidBodyComponent.gravityScale = 0;
+            rigidBodyComponent.mass = chargingMass;
             if (PlayerFacingRight)
             {
                 rigidBodyComponent.velocity = Vector2.right * chargeForce * playerSpeed;
@@ -432,6 +436,7 @@ public class PlayerController :  MonoBehaviour
     {
         isCharging = false;
         rigidBodyComponent.gravityScale = oldGravityScale;
+        rigidBodyComponent.mass = oldMass;
     }
 
     private void RemoveChargeBoostCooldown()
