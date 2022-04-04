@@ -11,6 +11,8 @@ TagManager:
   - Bug
   - BouncePad
   - HealthItem
+  - GameOverScreen
+  - MainMenu
   layers:
   - Default
   - TransparentFX

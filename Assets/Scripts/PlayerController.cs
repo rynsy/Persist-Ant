@@ -8,6 +8,7 @@ using System;
 public class PlayerController :  MonoBehaviour
 {
     private const int BOTTOM_OF_WORLD = -20;
+    private const int MAX_HEALTH = 3;
 
     // Components
     public Camera playerCamera;
@@ -44,7 +45,6 @@ public class PlayerController :  MonoBehaviour
 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float chargeForce = 1.5f;
-    [SerializeField] private float bounceBackForce = 5f;
 
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
@@ -139,10 +139,20 @@ public class PlayerController :  MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         capsuleColliderSize = capsuleCollider.size;
 
+        if(playerCamera == null)
+        {
+            GameObject.Find("MainCamera");
+        }
+
         // Set state for game start
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
         animatorComponent.SetBool("idle", true);
+    }
+
+    void Restart()
+    {
+        Health = MAX_HEALTH;
     }
 
     void Update()
@@ -531,7 +541,7 @@ public class PlayerController :  MonoBehaviour
     }
 
     //Restart reloads the scene when called.
-    private void Restart()
+    public void ResetHealth()
     {
         //Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
         //and not load all the scene object in the current scene.
@@ -540,7 +550,6 @@ public class PlayerController :  MonoBehaviour
 
     private void GameOver()
     {
-        SoundManager.instance.GameOver();
         GameManager.instance.GameOver();
     }
 

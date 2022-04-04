@@ -44,5 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelStartDelay: 0
+  menu: {fileID: 0}
+  gameOverScreen: {fileID: 0}
   playerPrefab: {fileID: 11446652, guid: 46e93428b42e8c740b0b21d4e4975ade, type: 3}
+  levelPrefab: {fileID: 466337449246358886, guid: 63a21113874ba944788ca4217cf34c4b, type: 3}
   cameraPrefab: {fileID: 2584648385775063376, guid: 9ad56f658d02f7249a9fd49a6cd19a7b, type: 3}

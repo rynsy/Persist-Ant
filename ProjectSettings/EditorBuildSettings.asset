@@ -6,30 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/FinalGameScenes/TeamName.unity
+    guid: d838bc4431ca4134ab654aa0a2e18965
+  - enabled: 1
+    path: Assets/Scenes/FinalGameScenes/StartMenu.unity
     guid: b1c69ef3a740c0349a277b15e6717aac
   - enabled: 1
-    path: Assets/Scenes/DebugScene.unity
-    guid: 41481e868064f0546ba1f623d691a62b
+    path: Assets/Scenes/FinalGameScenes/Intro.unity
+    guid: 4aa91aa85bc27c642852f137a4f4e68e
   - enabled: 1
-    path: Assets/Scenes/Main.unity
+    path: Assets/Scenes/FinalGameScenes/Level1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Intro.unity
-    guid: e7672b869cc33734ea35c685ca8e5181
-  - enabled: 1
-    path: Assets/Scenes/Intro2.unity
-    guid: 7778b252de79651409bf56d21733553a
-  - enabled: 1
-    path: Assets/Scenes/Intro3.unity
-    guid: 8cfc2c4cdbeccca4490b77ae45d78ecd
-  - enabled: 0
-    path: Assets/Scenes/_Dustin_LevelDesign.unity
-    guid: e1b9fb72a364574408374a0123216de7
-  - enabled: 0
-    path: Assets/Scenes/GameTitleScreen.unity
-    guid: 84e4ddd09eeb5964c98056256c8272ea
-  - enabled: 1
-    path: Assets/Scenes/Bootysmack.unity
-    guid: 80ea42c64ff82c24785a5f9a1f0f87ec
+    path: Assets/Scenes/FinalGameScenes/GameOver.unity
+    guid: 4fff3e998e2377e4887720d819ab8e51
   m_configObjects: {}

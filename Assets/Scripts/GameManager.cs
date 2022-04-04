@@ -10,12 +10,13 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 0f;                      //TODO: Fix	//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
-    public PlayerController playerPrefab;
+
     public Camera cameraPrefab;
+    public GameObject levelPrefab;
+    public PlayerController playerPrefab;
 
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
-    private string sceneToLoad;
     
     void Awake()
     {
@@ -30,41 +31,36 @@ public class GameManager : MonoBehaviour
         }
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
-        InitGame();
-    }
 
-    public void SetScene(string scene)
-    {
-        sceneToLoad = scene;
     }
 
     //Initializes the game for each level.
     public void InitGame()
     {
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
-        {
-            doingSetup = true;
-            Debug.Log("Setting up the scene");
-            
-            //Load Level
-            //SceneManager.LoadScene(sceneName: "DebugScene");
+        doingSetup = true;
+        Debug.Log("Setting up the scene");
 
-            // Create the player, set location to "PlayerStartLocation" in the scene after its setup
-            Invoke("StartLevel", levelStartDelay);
-        }
+        doingSetup = false;
+        StartLevel1();
     }
 
-    void StartLevel()
+    public void StartMenu()
+    {
+        SceneManager.LoadScene("StartMenu");
+    }
+
+    public void StartIntro()
+    {
+        SceneManager.LoadScene("Intro");
+    }
+
+    public void StartLevel1()
     {
         SoundManager.instance.EngageStress();
-        HideLevelImage();
+        SceneManager.LoadScene("Level1");
     }
     
     //Hides black image used between levels
-    void HideLevelImage()
-    {
-        doingSetup = false;
-    }
     
     //Update is called every frame.
     void Update()
@@ -76,11 +72,22 @@ public class GameManager : MonoBehaviour
         }
         // NOTE: Don't know that we'll need to do much here
     }
-    
+   
+    public void Restart()
+    {
+        StartLevel1();
+    }
+
     //GameOver is called when the player reaches 0 food points
     public void GameOver()
     {
-        enabled = false;
+        // Load GameOVerScene
+        SceneManager.LoadScene("GameOver");
     }
-    
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene("StartMenu");
+    }
+
 }
