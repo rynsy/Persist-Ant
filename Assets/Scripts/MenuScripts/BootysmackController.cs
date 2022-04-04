@@ -14,6 +14,7 @@ public class BootysmackController : MonoBehaviour
 
     IEnumerator GoToStartMenu()
     {
+        SoundManager.instance.PlayBooty();
         yield return new WaitForSeconds(4);
         SceneManager.LoadScene(sceneName: "StartMenu");
     }

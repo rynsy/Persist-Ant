@@ -15,6 +15,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip stressMusicMainLoop;
     public AudioClip gameOverSound;
     public AudioClip combineStarting;
+    public AudioClip bootysmack;
 
 
     public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
@@ -35,6 +36,11 @@ public class SoundManager : MonoBehaviour
         
         musicSource.loop = false;
         musicSource.Stop();
+    }
+
+    public void PlayBooty()
+    {
+        musicSource.PlayOneShot(bootysmack);
     }
 
     public bool IsMusicPlaying()

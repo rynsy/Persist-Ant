@@ -56,6 +56,7 @@ MonoBehaviour:
   stressMusicMainLoop: {fileID: 8300000, guid: b080295121a5ef84ea7a0aca3b001bad, type: 3}
   gameOverSound: {fileID: 8300000, guid: 6865d9a5e2bccb44293c1c74237505ec, type: 3}
   combineStarting: {fileID: 8300000, guid: 3441dc76ed99281499e7a3c6f84a13f9, type: 3}
+  bootysmack: {fileID: 8300000, guid: ec449cab584d5fe4884311f95c381639, type: 3}
   lowPitchRange: 0.95
   highPitchRange: 1.05
 --- !u!82 &860492449674351258
