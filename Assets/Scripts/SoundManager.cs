@@ -35,7 +35,6 @@ public class SoundManager : MonoBehaviour
         musicSource.loop = false;
         musicSource.Stop();
 
-
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
         {
             musicSource.loop = true;

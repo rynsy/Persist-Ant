@@ -137,12 +137,6 @@ public class PlayerController :  MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         capsuleColliderSize = capsuleCollider.size;
 
-
-        if (playerCamera == null)
-        {
-            playerCamera = GetComponent<Camera>();
-        }
-
         // Set state for game start
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
