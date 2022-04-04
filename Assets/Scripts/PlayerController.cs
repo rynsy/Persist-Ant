@@ -168,13 +168,11 @@ public class PlayerController :  MonoBehaviour
             {
                 newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
                 playMoveSound = true;
-            } else if (!isGrounded)
+            } else if (!isGrounded || isJumping)
             {
                 newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
                 playMoveSound = false;
-            }  else if (isJumping)
-            {
-                newVelocity = rigidBodyComponent.velocity; // fixes race condition
+                SwitchAnimation("jump");
             }
             if (moveDir.x != 0) // Player is moving in some direction
             {
@@ -373,13 +371,22 @@ public class PlayerController :  MonoBehaviour
     {
         if (canCharge)
         {
+            Debug.Log("Charging");
             canCharge = false;
             isCharging = true;
-            int dir = (PlayerFacingRight) ? 1 : -1;
+
             newVelocity.Set(0.0f, 0.0f);
             rigidBodyComponent.velocity = newVelocity;
-            newForce.Set(dir * chargeForce, 0.0f);
-            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+            rigidBodyComponent.gravityScale = 0;
+            if (PlayerFacingRight)
+            {
+                rigidBodyComponent.velocity = Vector2.right * chargeForce * playerSpeed;
+            } else
+            {
+                rigidBodyComponent.velocity = -Vector2.right * chargeForce * playerSpeed;
+            }
+ //           newForce.Set(dir * chargeForce, 0.0f);
+//            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
 
             SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
             SwitchAnimation("charge");
@@ -402,6 +409,7 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoost()
     {
         isCharging = false;
+        rigidBodyComponent.gravityScale = 9;
     }
 
     private void RemoveChargeBoostCooldown()
@@ -445,11 +453,11 @@ public class PlayerController :  MonoBehaviour
     // Ensure that boolean values that control states are mutually exclusive
     private void SwitchAnimation(string param)
     {
-        if (!isGrounded && param != "jump")
+        if (!isGrounded && (param != "jump"))
         {
             return;
         }
-        if (isCharging && param != "charge")
+        if (isCharging && (param != "charge"))
         {
             return;
         }
@@ -464,7 +472,10 @@ public class PlayerController :  MonoBehaviour
 
         foreach (string s in animationParameters)
         {
-            animatorComponent.SetBool(s, false);
+            if (s != param)
+            {
+                animatorComponent.SetBool(s, false);
+            }
         }
 
         animatorComponent.SetBool(param, true);
