@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;   //Allows us to use UI.
 using UnityEngine.SceneManagement;
+using System;
 
 //Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 public class PlayerController :  MonoBehaviour
 {
     public Camera playerCamera;
-    public Camera cameraPrefab;
 
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int playerSpeed = 5;
@@ -24,7 +24,39 @@ public class PlayerController :  MonoBehaviour
     private Rigidbody2D rigidBodyComponent;
 
     private Vector2 moveDir; 
+    
+    public Text levelTimeText;
+    public Text playerHealthText;
+    public AudioClip moveSound1;
+    public AudioClip playerHurtSound;
+    public AudioClip genericItemSound;
+    public AudioClip healthItemSound;
+    public AudioClip playerJumpSound;
+    public AudioClip playerBounceSound;
+    public AudioClip playerChargeSound;
+
+    private Animator animator;                  //Used to store a reference to the Player's animator component.
+    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
+
+    public bool canJump = true;
+    public bool canCharge = true;
+    public bool canMove = true;
+    private Vector2 chargeDir; 
+
+    public bool isDead = false;
+    public bool isJumping = false;
+    public bool isCharging = false;
+    public bool isTakingDamage = false;
+    public bool onGround;
+
+    private bool jumpKeyWasPressed;
+    private bool chargeKeyWasPressed;
+    private bool _facingRight;
+    
     private int _time = 0;
+   // private DateTime startTime = System.DateTime.Now;
+   // private DateTime endTime = System.DateTime.Now;       //Nice-to-have, time since start. For timing playthroughs
+
     public int Time
     {
         get
@@ -50,33 +82,6 @@ public class PlayerController :  MonoBehaviour
             UpdateHealthDisplay();
         }
     }
-    
-    public Text levelTimeText;
-    public Text playerHealthText;
-    public AudioClip moveSound1;
-    public AudioClip playerHurtSound;
-    public AudioClip genericItemSound;
-    public AudioClip healthItemSound;
-    public AudioClip playerJumpSound;
-    public AudioClip playerBounceSound;
-    public AudioClip playerChargeSound;
-
-    private Animator animator;                  //Used to store a reference to the Player's animator component.
-    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
-
-    public bool canJump = true;
-    public bool canCharge = true;
-    public bool canMove = true;
-    private Vector2 chargeDir; 
-
-    public bool isJumping = false;
-    public bool isCharging = false;
-    public bool onGround;
-
-    private bool jumpKeyWasPressed;
-    private bool chargeKeyWasPressed;
-    private bool _facingRight;
-
     public bool PlayerFacingRight
     {
         get
@@ -109,13 +114,6 @@ public class PlayerController :  MonoBehaviour
         animator.SetBool("idle", true);
     }
 
-
-    //This function is called when the behaviour becomes disabled or inactive.
-    private void OnDisable()
-    {
-        //NOTE: Might not need this
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -127,16 +125,6 @@ public class PlayerController :  MonoBehaviour
             chargeKeyWasPressed = true;
         }
         moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-    }
-
-    
-    private void SwitchAnimation(string param)
-    {
-        foreach (string s in animationParameters)
-        {
-            animator.SetBool(s, false);
-        }
-        animator.SetBool(param, true);
     }
 
 
@@ -188,6 +176,46 @@ public class PlayerController :  MonoBehaviour
 
         Time += 1;
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Platform")
+        {
+            canJump = true;
+            isJumping = false;
+            onGround = true;
+            SwitchAnimation("idle");            //TODO: Need to experiment with this
+        } else if (collision.gameObject.tag == "BouncePad")
+        {
+            Jump(bouncePadJumpFactor);
+            SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
+        }
+    }
+
+    //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        Debug.Log("Colliding with: " + other.name); 
+        // Raycast down to see if standing on "something"
+
+        //Check if the tag of the trigger collided with is Exit.
+        if (other.tag == "Enemy")
+        {
+            TakeDamage();
+        } else if (other.tag == "Item")
+        {
+            Destroy(other.gameObject);
+            SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
+            ApplySpeedBoost();
+        }
+        else if (other.tag == "HealthItem")
+        {
+            SoundManager.instance.PlaySingleSoundEffect(healthItemSound);
+            Destroy(other.gameObject);
+            Health += 1;
+        }
+    }
+
 
     private void Move(Vector2 dir)
     {
@@ -232,52 +260,6 @@ public class PlayerController :  MonoBehaviour
         SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
         Move(new Vector2(chargeDir.x * playerSpeed * chargeBoostFactor, chargeDir.y * playerSpeed * chargeBoostFactor));
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Platform")
-        {
-            canJump = true;
-            isJumping = false;
-            onGround = true;
-            SwitchAnimation("idle");            //TODO: Need to experiment with this
-        } else if (collision.gameObject.tag == "BouncePad")
-        {
-            Jump(bouncePadJumpFactor);
-            SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
-        }
-    }
-
-    //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        //Check if the tag of the trigger collided with is Exit.
-        if (other.tag == "Enemy")
-        {
-            SwitchAnimation("hurt");
-            SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
-            Health -= 1;
-            if (Health <= 0)
-            {
-                canMove = false;
-                SwitchAnimation("die");
-                Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
-            }
-        } else if (other.tag == "Item")
-        {
-            Destroy(other.gameObject);
-            SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
-            ApplySpeedBoost();
-        }
-        else if (other.tag == "HealthItem")
-        {
-            Debug.Log("I'm touching it");
-            SoundManager.instance.PlaySingleSoundEffect(healthItemSound);
-            Destroy(other.gameObject);
-            Health += 1;
-        }
-    }
-
     private void ApplySpeedBoost()
     {
         playerSpeed *= speedBoostFactor;
@@ -321,6 +303,56 @@ public class PlayerController :  MonoBehaviour
     private void UpdateHealthDisplay()
     {
         //TODO: Change the health display to have current value of Health
+    }
+
+    private void SwitchAnimation(string param)
+    {
+        if (isJumping && param != "jump")
+        {
+            return;
+        }
+        if (isDead && param != "die")
+        {
+            return;
+        }
+        if (isTakingDamage)
+        {
+            return;
+        }
+
+        foreach (string s in animationParameters)
+        {
+            animator.SetBool(s, false);
+        }
+
+        animator.SetBool(param, true);
+    }
+
+    private void TakeDamage()
+    {
+        SwitchAnimation("hurt");
+        isTakingDamage = true;
+        SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
+        Health -= 1;
+        if (Health <= 0)
+        {
+            Invoke("Die", 1f);
+        }
+    }
+
+    private void DamageAnimationDone()
+    {
+        isTakingDamage = false;
+        animator.SetBool("hurt", false);
+        animator.SetBool("idle", true);
+    }
+
+    private void Die()
+    {
+        canMove = false;
+        isDead = true;
+        SwitchAnimation("die");
+        Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
     }
 
     //Restart reloads the scene when called.
