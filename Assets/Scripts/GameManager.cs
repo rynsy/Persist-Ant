@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 0f;                      //TODO: Fix	//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
+
+    public PlayerController playerPrefab;
+    public Camera cameraPrefab;
+
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
     
     void Awake()
