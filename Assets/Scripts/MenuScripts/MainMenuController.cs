@@ -34,7 +34,7 @@ public class MainMenuController : MonoBehaviour
   
     IEnumerator Load(string scene, float delay)
     {
-        yield return new WaitForSeconds(delay/2);
+        yield return new WaitForSeconds(delay);
         Debug.Log("LOADED");
         GameManager.instance.StartIntro();
     }    
