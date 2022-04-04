@@ -9,6 +9,7 @@ public class WormController : MonoBehaviour
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
     public AudioClip wormDeathSound; 
+    public ParticleSystem blood;
     
     public float motionTriggerRadius;
 
@@ -35,16 +36,40 @@ public class WormController : MonoBehaviour
             if (other.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
+                animatorComponent.SetTrigger("die");
+                blood.Play();
             }
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
-                rigidbodyComponent.simulated = false;
-                SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
-                animatorComponent.SetTrigger("die");
+                Kill();
             }
+        } 
+        if (other.gameObject.tag == "Combine")
+        {
+            Debug.Log("combine worm");
+            Kill();
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Combine")
+        {
+            Debug.Log("combine worm");
+            Kill();
+        }
+    }
+
+
+    public void Kill()
+    {
+        rigidbodyComponent.simulated = false;
+        SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
+        animatorComponent.SetTrigger("die");
+        blood.Play();
+    }
+
     public void DestroyWorm()
     {
         Destroy(gameObject);

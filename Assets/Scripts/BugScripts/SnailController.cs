@@ -8,6 +8,7 @@ public class SnailController : MonoBehaviour
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
     public AudioClip snailDeathSound; 
+    public ParticleSystem blood;
 
     public float bugSpeed = 0.2f;
 
@@ -36,14 +37,29 @@ public class SnailController : MonoBehaviour
             {
                 rigidbodyComponent.simulated = false;
                 SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
-                animatorComponent.SetTrigger("snailDead");
+                Kill();
             }
         } else if (collision.gameObject.tag == "Combine")
         {
             rigidbodyComponent.simulated = false;
             SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
-            animatorComponent.SetTrigger("snailDead");
+            Kill();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Combine")
+        {
+            Kill();
+        }
+    }
+
+    public void Kill()
+    {
+        animatorComponent.SetTrigger("snailDead");
+        SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
+        blood.Play();
     }
 
     public void DestroySnail()

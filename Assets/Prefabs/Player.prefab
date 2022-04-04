@@ -152,7 +152,7 @@ MonoBehaviour:
   playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
-  playerHealth: 3000
+  playerHealth: 3
   playerSpeed: 8
   speedBoostFactor: 2
   jumpForce: 22
