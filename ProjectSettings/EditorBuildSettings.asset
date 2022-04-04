@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: b1c69ef3a740c0349a277b15e6717aac
+  - enabled: 1
+    path: Assets/Scenes/DebugScene.unity
+    guid: 41481e868064f0546ba1f623d691a62b
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
@@ -17,10 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Intro3.unity
     guid: 8cfc2c4cdbeccca4490b77ae45d78ecd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/_Dustin_LevelDesign.unity
     guid: e1b9fb72a364574408374a0123216de7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameTitleScreen.unity
     guid: 84e4ddd09eeb5964c98056256c8272ea
   - enabled: 1

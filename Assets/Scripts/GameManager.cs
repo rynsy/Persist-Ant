@@ -10,11 +10,12 @@ public class GameManager : MonoBehaviour
     public float levelStartDelay = 0f;                      //TODO: Fix	//Time to wait before starting level, in seconds.
     public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
 
-
     public PlayerController playerPrefab;
     public Camera cameraPrefab;
 
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
+
+    private string sceneToLoad;
     
     void Awake()
     {
@@ -32,14 +33,32 @@ public class GameManager : MonoBehaviour
         InitGame();
     }
 
-    
-    //Initializes the game for each level.
-    void InitGame()
+    public void SetScene(string scene)
     {
-        doingSetup = true;
-        Invoke("StartLevel", levelStartDelay);
+        sceneToLoad = scene;
     }
-   
+
+    //Initializes the game for each level.
+    public void InitGame()
+    {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
+        {
+            doingSetup = true;
+            Debug.Log("Setting up the scene");
+            
+            //Load Level
+            SceneManager.LoadScene(sceneName: "DebugScene");
+
+            // Create the player, set location to "PlayerStartLocation" in the scene after its setup
+            PlayerController player = Instantiate(playerPrefab);
+            Camera camera = Instantiate(cameraPrefab);
+            GameObject startLocation = GameObject.Find("PlayerStart");
+            player.transform.position = startLocation.transform.position;
+
+            Invoke("StartLevel", levelStartDelay);
+        }
+    }
+
     void StartLevel()
     {
         SoundManager.instance.EngageStress();
@@ -62,7 +81,6 @@ public class GameManager : MonoBehaviour
         }
         // NOTE: Don't know that we'll need to do much here
     }
-    
     
     //GameOver is called when the player reaches 0 food points
     public void GameOver()

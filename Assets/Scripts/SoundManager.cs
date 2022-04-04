@@ -1,13 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour 
 {
     public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
     public AudioSource walkSoundSource;					//Drag a reference to the audio source which will play the sound effects.
-    public AudioSource chillMusicSource;					//Drag a reference to the audio source which will play the music.
-    public AudioSource stressfulMusicSource;					//Drag a reference to the audio source which will play the music.
-    public AudioSource gameoverMusicSource;					//Drag a reference to the audio source which will play the music.
+    public AudioSource musicSource;
+
+    public AudioClip mainMenuMusic;
+    public AudioClip chillMusic;
+    public AudioClip stressMusicIntro;
+    public AudioClip stressMusicMainLoop;
+    public AudioClip gameOverSound;
+
 
     public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
     public float lowPitchRange = .95f;				//The lowest a sound effect will be randomly pitched.
@@ -26,35 +32,62 @@ public class SoundManager : MonoBehaviour
         }
         DontDestroyOnLoad (gameObject);
         
-        gameoverMusicSource.loop = false;
-        gameoverMusicSource.Stop();
+        musicSource.loop = false;
+        musicSource.Stop();
+
+
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
+        {
+            musicSource.loop = true;
+            musicSource.clip = mainMenuMusic;
+            musicSource.Play();
+        }
+
+    }
+
+    public bool IsMusicPlaying()
+    {
+        return musicSource.isPlaying;
+    }
+
+    public void PlayChillMusic()
+    {
+        musicSource.Stop();
+        musicSource.loop = true;
+        musicSource.clip = chillMusic;
+        musicSource.Play();
     }
      
     public void EngageStress()
     {
-        chillMusicSource.loop = false;
-        chillMusicSource.Stop();
-        stressfulMusicSource.loop = true;
-        stressfulMusicSource.Play();
+        StopMusic();
+        musicSource.clip = stressMusicIntro;
+        musicSource.Play();
+        StartCoroutine("PlayStressIntro");
+    }
+
+    IEnumerator PlayStressIntro()
+    {
+        while (musicSource.isPlaying)
+        {
+            yield return null;
+        }
+        musicSource.Stop();
+        musicSource.loop = true;
+        musicSource.clip = stressMusicMainLoop;
+        musicSource.Play();
     }
 
     public void StopMusic()
     {
-        chillMusicSource.loop = false;
-        chillMusicSource.Stop();
-
-        stressfulMusicSource.loop = false;
-        stressfulMusicSource.Stop();
+        musicSource.loop = false;
+        musicSource.Stop();
     }
 
     public void GameOver()
     {
         StopMusic();
-        if (!gameoverMusicSource.isPlaying)
-        {
-            gameoverMusicSource.loop = false;
-            gameoverMusicSource.Play();
-        }
+        musicSource.PlayOneShot(gameOverSound);
     }
 
     public void PlaySingleSoundEffect(AudioClip clip)
