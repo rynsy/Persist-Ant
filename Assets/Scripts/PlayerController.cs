@@ -45,7 +45,6 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float chargeForce = 1.5f;
 
-    [SerializeField] private float bouncePadJumpFactor = 10f;
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
     [SerializeField] private float chargeBoostCooldown = 5f;
