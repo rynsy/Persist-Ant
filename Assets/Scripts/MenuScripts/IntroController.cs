@@ -32,7 +32,7 @@ public class IntroController : MonoBehaviour
             }
             yield return new WaitForSeconds(transitionDelay);
         }
-            yield return new WaitForSeconds(1.8f);
+           //ield return new WaitForSeconds(1.8f);
         GameManager.instance.StartLevel1();         
     }
 }
