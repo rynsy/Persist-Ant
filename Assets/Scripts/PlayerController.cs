@@ -13,6 +13,7 @@ public class PlayerController :  MonoBehaviour
     // Components
     public Camera playerCamera;
     public ParticleSystem dust;
+    public ParticleSystem blood;
     public FreeParallax parallaxComponent;
     private Rigidbody2D rigidBodyComponent;
     private Animator animatorComponent;
@@ -36,7 +37,6 @@ public class PlayerController :  MonoBehaviour
 
     // Movement Vectors
     private Vector2 moveDir; 
-    private Vector2 chargeDir; 
 
     // Player Parameters
     [SerializeField] private int playerHealth = 3;
@@ -520,6 +520,7 @@ public class PlayerController :  MonoBehaviour
         SwitchAnimation("hurt");
         isTakingDamage = true;
         SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
+        blood.Play();
         Health -= 1;
         if (Health <= 0)
         {
