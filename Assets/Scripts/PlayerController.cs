@@ -9,19 +9,20 @@ public class PlayerController :  MonoBehaviour
     public Camera playerCamera;
 
     [SerializeField] private int playerHealth = 3;
-    [SerializeField] private int speed = 5;
+    [SerializeField] private int playerSpeed = 5;
     [SerializeField] private int speedBoostFactor = 2;
     [SerializeField] private float jumpFactor = 5f;
     [SerializeField] private float bouncePadJumpFactor = 10f;
-
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostFactor = 1.5f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
     [SerializeField] private float chargeBoostCooldown = 5f;
+    [SerializeField] private float parallaxSpeed;
 
+    public FreeParallax parallaxComponent;
     private Rigidbody2D rigidBodyComponent;
+
     private Vector2 moveDir; 
-    private Vector2 prevMoveDir; 
     private int _time = 0;
     public int Time
     {
@@ -94,9 +95,16 @@ public class PlayerController :  MonoBehaviour
         //Get a component reference to the Player's animator component
         animator = GetComponent<Animator>();
         rigidBodyComponent = GetComponent<Rigidbody2D>();
+        parallaxComponent = GameObject.Find("Background").GetComponentInChildren<FreeParallax>();
+
+        if (playerCamera == null)
+        {
+            playerCamera = GetComponent<Camera>();
+        }
+
+
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
-        prevMoveDir = Vector2.zero;
         animator.SetBool("idle", true);
     }
 
@@ -147,7 +155,7 @@ public class PlayerController :  MonoBehaviour
                 {
                     SwitchAnimation("idle");
                 }
-                Move(new Vector2(moveDir.x * speed, rigidBodyComponent.velocity.y));
+                Move(new Vector2(moveDir.x * playerSpeed, rigidBodyComponent.velocity.y));
             }
             else
             {
@@ -178,7 +186,6 @@ public class PlayerController :  MonoBehaviour
         }
 
         Time += 1;
-        prevMoveDir = moveDir;
     }
 
     private void Move(Vector2 dir)
@@ -192,6 +199,7 @@ public class PlayerController :  MonoBehaviour
             SoundManager.instance.StopSoundEffects();
         }
 
+        UpdateParallax();
         rigidBodyComponent.velocity = dir;
         playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
     }
@@ -221,7 +229,7 @@ public class PlayerController :  MonoBehaviour
     {
         SwitchAnimation("charge");
         SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
-        Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
+        Move(new Vector2(chargeDir.x * playerSpeed * chargeBoostFactor, chargeDir.y * playerSpeed * chargeBoostFactor));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -271,12 +279,12 @@ public class PlayerController :  MonoBehaviour
 
     private void ApplySpeedBoost()
     {
-        speed *= speedBoostFactor;
+        playerSpeed *= speedBoostFactor;
         Invoke("RemoveSpeedBoost", speedBoostDuration);
     }
     private void RemoveSpeedBoost()
     {
-        speed /= speedBoostFactor;
+        playerSpeed /= speedBoostFactor;
     }
 
     private void RemoveChargeBoost()
@@ -287,6 +295,26 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoostCooldown()
     {
         canCharge = true;
+    }
+
+    private void UpdateParallax()
+    {
+        if (parallaxComponent != null)
+        {
+            if(animator.GetBool("idle"))
+            {
+                parallaxComponent.Speed = 0.0f;
+            } else
+            {
+                if (PlayerFacingRight)
+                {
+                    parallaxComponent.Speed = -parallaxSpeed;
+                } else
+                {
+                    parallaxComponent.Speed = parallaxSpeed;
+                }
+            }
+        }
     }
 
     private void UpdateHealthDisplay()

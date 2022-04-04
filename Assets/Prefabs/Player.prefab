@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
   playerHealth: 3
-  speed: 5
+  playerSpeed: 5
   speedBoostFactor: 2
   jumpFactor: 5
   bouncePadJumpFactor: 10
@@ -174,9 +174,17 @@ MonoBehaviour:
   chargeBoostFactor: 2
   chargeBoostDuration: 0.4
   chargeBoostCooldown: 0
+  parallaxSpeed: 1
+  parallaxComponent: {fileID: 0}
   levelTimeText: {fileID: 0}
   playerHealthText: {fileID: 0}
   moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
+  playerHurtSound: {fileID: 0}
+  genericItemSound: {fileID: 0}
+  healthItemSound: {fileID: 0}
+  playerJumpSound: {fileID: 0}
+  playerBounceSound: {fileID: 0}
+  playerChargeSound: {fileID: 0}
   canJump: 1
   canCharge: 1
   canMove: 1
