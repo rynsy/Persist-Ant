@@ -165,6 +165,7 @@ public class PlayerController :  MonoBehaviour
         CheckGround();
         SlopeCheck();
         ApplyMovement();
+        UpdateCameraPosition();
     }
 
     private void ApplyMovement()
@@ -236,6 +237,7 @@ public class PlayerController :  MonoBehaviour
             }
         } else if (other.tag == "Spike")
         {
+            Health = 0;
             TakeDamage();
         } else if (other.tag == "Item")
         {
@@ -408,8 +410,6 @@ public class PlayerController :  MonoBehaviour
             {
                 rigidBodyComponent.velocity = -Vector2.right * chargeForce * playerSpeed;
             }
- //           newForce.Set(dir * chargeForce, 0.0f);
-//            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
 
             SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
             SwitchAnimation("charge");
@@ -521,10 +521,13 @@ public class PlayerController :  MonoBehaviour
         isTakingDamage = true;
         SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
         Health -= 1;
-
         if (Health <= 0)
         {
             Invoke("Die", 1f);
+        }
+        if (!isGrounded)
+        {
+            isTakingDamage = false;
         }
     }
 

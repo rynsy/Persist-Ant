@@ -13,6 +13,7 @@ TagManager:
   - HealthItem
   - GameOverScreen
   - MainMenu
+  - Spike
   layers:
   - Default
   - TransparentFX
