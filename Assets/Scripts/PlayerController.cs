@@ -217,8 +217,11 @@ public class PlayerController :  MonoBehaviour
             SwitchAnimation("idle");            //TODO: Need to experiment with this
         } else if (collision.gameObject.tag == "BouncePad")
         {
-            // TODO: initiate bounce. Possibly won't need this, but will definitely need to play the sound, maybe the jump animation
-            SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
+            if (collision.collider.sharedMaterial.name != null  
+                && collision.collider.sharedMaterial.name == "Full Bounce")
+            {
+                SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
+            }
         }
     }
 
@@ -377,7 +380,6 @@ public class PlayerController :  MonoBehaviour
         {
             canCharge = false;
             isCharging = true;
-            rigidBodyComponent.sharedMaterial = noFriction;
             int dir = (PlayerFacingRight) ? 1 : -1;
             newVelocity.Set(0.0f, 0.0f);
             rigidBodyComponent.velocity = newVelocity;
@@ -405,7 +407,6 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoost()
     {
         isCharging = false;
-        rigidBodyComponent.sharedMaterial = fullFriction;
     }
 
     private void RemoveChargeBoostCooldown()
