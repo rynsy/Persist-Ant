@@ -5,8 +5,8 @@ using UnityEngine;
 public class EndController : MonoBehaviour
 {
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
-        SoundManager.instance.GameEnd();
+        SoundManager.instance.GameWin();
     }
 }

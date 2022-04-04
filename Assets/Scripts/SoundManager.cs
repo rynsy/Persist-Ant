@@ -97,7 +97,7 @@ public class SoundManager : MonoBehaviour
         musicSource.PlayOneShot(gameOverSound);
     }
 
-    public void GameEnd()
+    public void GameWin()
     {
         StopMusic();
         musicSource.PlayOneShot(endMusic);
