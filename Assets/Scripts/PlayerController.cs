@@ -45,13 +45,19 @@ public class PlayerController :  MonoBehaviour
         set
         {
             playerHealth = value;
-            playerHealthText.text = "HEALTH: " + playerHealth;
+            playerHealthText.text = "HEALTH: " + playerHealth;      //NOTE: 
         }
     }
     
     public Text levelTimeText;
     public Text playerHealthText;
     public AudioClip moveSound1;
+    public AudioClip playerHurtSound;
+    public AudioClip genericItemSound;
+    public AudioClip healthItemSound;
+    public AudioClip playerJumpSound;
+    public AudioClip playerBounceSound;
+    public AudioClip playerChargeSound;
 
     private Animator animator;                  //Used to store a reference to the Player's animator component.
     string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
@@ -68,6 +74,7 @@ public class PlayerController :  MonoBehaviour
     private bool jumpKeyWasPressed;
     private bool chargeKeyWasPressed;
     private bool _facingRight;
+
     public bool PlayerFacingRight
     {
         get
@@ -90,7 +97,7 @@ public class PlayerController :  MonoBehaviour
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
         prevMoveDir = Vector2.zero;
-        animator.SetBool("playerIdle", true);
+        animator.SetBool("idle", true);
     }
 
 
@@ -132,7 +139,6 @@ public class PlayerController :  MonoBehaviour
             {
                 PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
                                         || (moveDir.x > 0);
-                animator.SetBool("facingRight", PlayerFacingRight);
                 if (moveDir.x != 0) // Player is moving in some direction
                 {
                     SwitchAnimation("run");
@@ -197,6 +203,7 @@ public class PlayerController :  MonoBehaviour
         canJump = false;
         onGround = false;
         SwitchAnimation("jump");
+        SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
         Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * j));
     }
 
@@ -213,6 +220,7 @@ public class PlayerController :  MonoBehaviour
     private void Charge()
     {
         SwitchAnimation("charge");
+        SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
         Move(new Vector2(chargeDir.x * speed * chargeBoostFactor, chargeDir.y * speed * chargeBoostFactor));
     }
 
@@ -227,6 +235,7 @@ public class PlayerController :  MonoBehaviour
         } else if (collision.gameObject.tag == "BouncePad")
         {
             Jump(bouncePadJumpFactor);
+            SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
         }
     }
 
@@ -237,6 +246,7 @@ public class PlayerController :  MonoBehaviour
         if (other.tag == "Enemy")
         {
             SwitchAnimation("hurt");
+            SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
             Health -= 1;
             if (Health <= 0)
             {
@@ -247,13 +257,15 @@ public class PlayerController :  MonoBehaviour
         } else if (other.tag == "Item")
         {
             Destroy(other.gameObject);
+            SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
             ApplySpeedBoost();
         }
         else if (other.tag == "HealthItem")
         {
             Debug.Log("I'm touching it");
+            SoundManager.instance.PlaySingleSoundEffect(healthItemSound);
             Destroy(other.gameObject);
-            playerHealth += 1;
+            Health += 1;
         }
     }
 

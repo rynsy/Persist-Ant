@@ -7,20 +7,12 @@ public class WormController : MonoBehaviour
 {
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
+    public AudioClip wormDeathSound; 
 
     void Start()
     {
         animatorComponent = GetComponent<Animator>();
         rigidbodyComponent = GetComponent<Rigidbody2D>();
-    }
-
-    void Update()
-    {
-
-    }
-    public void DestroyWorm()
-    {
-        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -30,21 +22,27 @@ public class WormController : MonoBehaviour
         {
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
-                //SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
-                Debug.Log("Worm touch");
+                SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
             }
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;
+                SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
                 animatorComponent.SetTrigger("die");
-                Debug.Log("Worm charge");
             }
         }
     }
-
-    public void WiggleWorm()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        animatorComponent.SetTrigger("wiggle");
+        if (other.tag == "Player")
+        {
+            //arise worm
+            animatorComponent.SetTrigger("wiggle");
+        }
+    }
+    public void DestroyWorm()
+    {
+        Destroy(gameObject);
     }
 }

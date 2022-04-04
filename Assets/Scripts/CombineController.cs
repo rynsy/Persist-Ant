@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class CombineController : MonoBehaviour
 {
-    public float combineSpeed = 3f;
+    public AudioClip startCombineSound; 
+    public AudioClip gameloopCombineSound; 
+    public AudioClip combineGrindBugSound; 
+
+    public float combineSpeed = 1f;
     public float damp = 0.001f;
 
     private void FixedUpdate()

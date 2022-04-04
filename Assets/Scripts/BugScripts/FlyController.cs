@@ -43,8 +43,14 @@ public class FlyController : MonoBehaviour
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;
+                SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
                 animatorComponent.SetTrigger("FlyDead");
             }
+        } else if (collision.gameObject.tag == "Combine")
+        {
+            rigidbodyComponent.simulated = false;
+            SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
+            animatorComponent.SetTrigger("FlyDead"); //TODO: May need to change this
         }
     }
 
