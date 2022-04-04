@@ -44,6 +44,7 @@ public class PlayerController :  MonoBehaviour
 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float chargeForce = 1.5f;
+    [SerializeField] private float bounceBackForce = 5f;
 
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
@@ -89,7 +90,7 @@ public class PlayerController :  MonoBehaviour
     private int _time = 0;
     private DateTime startTime = System.DateTime.Now;
     private DateTime endTime = System.DateTime.Now;
-    
+
     // Variables that need fancy getters/setters to couple variables to actions
     public int Time
     {
@@ -219,11 +220,17 @@ public class PlayerController :  MonoBehaviour
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
         {
-            TakeDamage();
+            if (!isCharging)
+            {
+                TakeDamage(GetCollisionDirection(other));
+            }
+        } else if (other.tag == "Spike")
+        {
+            TakeDamage(GetCollisionDirection(other));
         } else if (other.tag == "Item")
         {
-            Destroy(other.gameObject);
             SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
+            Destroy(other.gameObject);
             ApplySpeedBoost();
         }
         else if (other.tag == "HealthItem")
@@ -233,6 +240,21 @@ public class PlayerController :  MonoBehaviour
             Health += 1;
         }
     }
+
+    private Vector2 GetCollisionDirection(Collider2D other)
+    {
+        Vector2 bounceBackDir;
+        if (other.transform.position.x >= transform.position.x)
+        {   // enemy is on the right
+            bounceBackDir = new Vector2(-1 * bounceBackForce, bounceBackForce * 2);
+        } else
+        {
+            bounceBackDir = new Vector2(1 * bounceBackForce, bounceBackForce * 2);
+        }
+        Debug.Log("BounceBack Direction: " + bounceBackDir);
+        return bounceBackDir;
+    }
+
 
     private void Move(Vector2 dir, bool playWalkSound)
     {
@@ -495,12 +517,15 @@ public class PlayerController :  MonoBehaviour
     }
 
 
-    private void TakeDamage()
+    private void TakeDamage(Vector2 bounceBackDir)
     {
         SwitchAnimation("hurt");
         isTakingDamage = true;
         SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
         Health -= 1;
+
+        Move(bounceBackDir, false);
+
         if (Health <= 0)
         {
             Invoke("Die", 1f);

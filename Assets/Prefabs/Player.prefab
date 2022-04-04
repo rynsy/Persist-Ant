@@ -157,6 +157,7 @@ MonoBehaviour:
   speedBoostFactor: 2
   jumpForce: 30
   chargeForce: 30
+  bounceBackForce: 10
   speedBoostDuration: 10
   chargeBoostDuration: 0.4
   chargeBoostCooldown: 1
@@ -193,7 +194,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.05, y: 0}
-  m_Size: {x: 0.7, y: 0.2}
+  m_Size: {x: 0.5, y: 0.2}
   m_Direction: 1
 --- !u!1 &954299036
 GameObject:

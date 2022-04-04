@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1408165279728846516}
   - component: {fileID: 1408165279728846519}
   - component: {fileID: 1408165279728846515}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Worm
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408165279728846521}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
