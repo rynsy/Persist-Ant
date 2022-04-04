@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7243144555258514440}
   - component: {fileID: 7243144555258514441}
   - component: {fileID: 7243144555258514439}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LogPlatform
   m_TagString: Platform
   m_Icon: {fileID: 0}

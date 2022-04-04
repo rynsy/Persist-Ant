@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3130110219488696520}
   - component: {fileID: 3130110219488696519}
   - component: {fileID: 3130110219488696523}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AntWife
   m_TagString: Untagged
   m_Icon: {fileID: 0}

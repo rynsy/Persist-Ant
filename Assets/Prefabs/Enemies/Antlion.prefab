@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2764723522050089783}
   - component: {fileID: 2764723522050089778}
   - component: {fileID: 2764723522050089777}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Antlion
   m_TagString: Enemy
   m_Icon: {fileID: 0}

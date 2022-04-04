@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5742041221312573150}
   - component: {fileID: 5742041221312573136}
-  - component: {fileID: 5742041221312573137}
   - component: {fileID: 5742041221312573151}
   - component: {fileID: 3586464038218806973}
-  m_Layer: 6
+  - component: {fileID: 487278426}
+  - component: {fileID: 487278429}
+  m_Layer: 8
   m_Name: LadyBug
   m_TagString: BouncePad
   m_Icon: {fileID: 0}
@@ -85,32 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5742041221312573137
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5742041221312573138}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.22, y: 0.71}
-    newSize: {x: 1.22, y: 0.71}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.22, y: 0.71}
-  m_EdgeRadius: 0
 --- !u!50 &5742041221312573151
 Rigidbody2D:
   serializedVersion: 4
@@ -146,3 +121,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ladybugDeathSound: {fileID: 0}
   bugSpeed: 2
+--- !u!70 &487278426
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742041221312573138}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 1d819f47e98f67347ba8c348f5ec6588, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.05, y: 0.1}
+  m_Size: {x: 0.5, y: 0.25}
+  m_Direction: 1
+--- !u!61 &487278429
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742041221312573138}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.04637754, y: -0.18612504}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.22, y: 0.71}
+    newSize: {x: 1.22, y: 0.71}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9473336, y: 0.29188776}
+  m_EdgeRadius: 0

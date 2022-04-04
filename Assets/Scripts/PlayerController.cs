@@ -71,10 +71,6 @@ public class PlayerController :  MonoBehaviour
 
     // Flags
     private bool _facingRight;
-    private bool jumpButtonPressed;
-    private bool isTakingDamage;        // Hack to make sure hurt animation plays
-    private bool isGrounded;
-    private bool isOnSlope;
     private bool canWalkOnSlope;
 
     public bool canJump = true;
@@ -82,6 +78,9 @@ public class PlayerController :  MonoBehaviour
     public bool canMove = true;
 
     // Exposed for debugging/toggling animations
+    public bool isTakingDamage;        // Hack to make sure hurt animation plays
+    public bool isOnSlope;
+    public bool isGrounded;
     public bool isDead;
     public bool isJumping;
     public bool isCharging;
@@ -168,23 +167,22 @@ public class PlayerController :  MonoBehaviour
         bool playMoveSound = false;
         if (canMove)
         {
-            //newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
-            //rigidBodyComponent.velocity = newVelocity;
-
-            if (isGrounded && !isOnSlope)
+            if (isGrounded && !isOnSlope && !isJumping)
             {
                 newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
                 playMoveSound = true;
-            } else if (isGrounded && isOnSlope)
+            } else if (isGrounded && isOnSlope && canWalkOnSlope && !isJumping)
             {
                 newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
                 playMoveSound = true;
-
             } else if (!isGrounded)
             {
                 newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
                 playMoveSound = false;
-            } 
+            }  else if (isJumping)
+            {
+                newVelocity = rigidBodyComponent.velocity; // fixes race condition
+            }
             if (moveDir.x != 0) // Player is moving in some direction
             {
                 SwitchAnimation("run");
@@ -211,13 +209,10 @@ public class PlayerController :  MonoBehaviour
 
         if (collision.gameObject.tag == "Platform")
         {
-            canJump = true;
-            Debug.Log("Setting isGrounded to true");
-            isGrounded = true;
-            SwitchAnimation("idle");            //TODO: Need to experiment with this
+            //SwitchAnimation("idle");            //TODO: Need to experiment with this
         } else if (collision.gameObject.tag == "BouncePad")
         {
-            if (collision.collider.sharedMaterial.name != null  
+            if ( collision.collider.sharedMaterial != null  
                 && collision.collider.sharedMaterial.name == "Full Bounce")
             {
                 SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
@@ -252,7 +247,6 @@ public class PlayerController :  MonoBehaviour
         //play move sound
         if (playWalkSound)
         {
-            Debug.Log("Playing Walk Sound");
             SoundManager.instance.PlayWalkSound(moveSound1);
             dust.Play();
         } 
@@ -286,17 +280,19 @@ public class PlayerController :  MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
         if (rigidBodyComponent.velocity.y <= 0.0f)
         {
-            isJumping = false;  //You've hit the top of the jump arc, now you're falling.
+            isJumping = false;
         }
-        if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
+
+        if (isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
         {
             canJump = true;
         }
-    }
 
+    }
     private void SlopeCheck()
     {
-        Vector2 checkPos = transform.position - (Vector3)(new Vector2(0.0f, 2 / 2)); //TODO: add capsuleCollider to y
+        Vector2 checkPos = transform.position - (Vector3)(new Vector2(0.0f, capsuleColliderSize.y / 2));
+
         SlopeCheckHorizontal(checkPos);
         SlopeCheckVertical(checkPos);
     }
@@ -305,63 +301,68 @@ public class PlayerController :  MonoBehaviour
     {
         RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, slopeCheckDistance, whatIsGround);
         RaycastHit2D slopeHitBack = Physics2D.Raycast(checkPos, -transform.right, slopeCheckDistance, whatIsGround);
-        
+
         if (slopeHitFront)
         {
             isOnSlope = true;
             slopeSideAngle = Vector2.Angle(slopeHitFront.normal, Vector2.up);
-        } else if (slopeHitBack)
+        }
+        else if (slopeHitBack)
         {
             isOnSlope = true;
             slopeSideAngle = Vector2.Angle(slopeHitBack.normal, Vector2.up);
-        } else
+        }
+        else
         {
             slopeSideAngle = 0.0f;
             isOnSlope = false;
         }
+
     }
+
 
     private void SlopeCheckVertical(Vector2 checkPos)
     {
         RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, slopeCheckDistance, whatIsGround);
+
         if (hit)
         {
             slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
             slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
-            if(slopeDownAngle != lastSlopeAngle)
+            if (slopeDownAngle != lastSlopeAngle)
             {
                 isOnSlope = true;
             }
             lastSlopeAngle = slopeDownAngle;
+
             Debug.DrawRay(hit.point, slopeNormalPerp, Color.blue);
             Debug.DrawRay(hit.point, hit.normal, Color.green);
         }
-
         if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
         {
             canWalkOnSlope = false;
-        } else
+        }
+        else
         {
             canWalkOnSlope = true;
         }
-
-        if (!isOnSlope && canWalkOnSlope && moveDir.x == 0.0f)
+        if (isOnSlope && canWalkOnSlope && moveDir.x == 0.0f)
         {
             rigidBodyComponent.sharedMaterial = fullFriction;
-        } else
+        }
+        else
         {
             rigidBodyComponent.sharedMaterial = noFriction;
         }
     }
-
     private void Jump()
     {
         if (canJump)
         {
+            Debug.Log("isJumping = true");
             isJumping = true;
-            canJump = false;
-            Debug.Log("Setting isGrounded to false");
             isGrounded = false;
+            canJump = false;
             SwitchAnimation("jump");
             SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
 
@@ -370,6 +371,7 @@ public class PlayerController :  MonoBehaviour
 
             newForce.Set(0.0f, jumpForce);
             rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+            Debug.Log("Jumping. New Velocity after force is applied: " + rigidBodyComponent.velocity);
             UpdateCameraPosition();
         }
     }
@@ -516,5 +518,10 @@ public class PlayerController :  MonoBehaviour
     {
         SoundManager.instance.GameOver();
         GameManager.instance.GameOver();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2649737304329591142}
   - component: {fileID: 2649737304329591143}
   - component: {fileID: 3182323229624025525}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: SandTile
   m_TagString: Platform
   m_Icon: {fileID: 0}
