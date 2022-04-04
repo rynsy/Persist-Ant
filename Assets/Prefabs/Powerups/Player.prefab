@@ -120,10 +120,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.5
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 9
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -162,7 +162,7 @@ MonoBehaviour:
   chargeBoostDuration: 0.4
   chargeBoostCooldown: 1
   parallaxSpeed: 1
-  groundCheckRadius: 0.2
+  groundCheckRadius: 0.15
   slopeCheckDistance: 0.6
   maxSlopeAngle: 50
   groundCheck: {fileID: 954299037}
@@ -193,8 +193,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.8, y: 0.1}
+  m_Offset: {x: -0.05, y: 0}
+  m_Size: {x: 0.7, y: 0.2}
   m_Direction: 1
 --- !u!61 &865402023
 BoxCollider2D:
@@ -208,8 +208,8 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
+  m_UsedByComposite: 1
+  m_Offset: {x: -0.049954236, y: -0.093622886}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -220,7 +220,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.1}
+  m_Size: {x: 0.68493664, y: 0.08724578}
   m_EdgeRadius: 0
 --- !u!1 &954299036
 GameObject:
@@ -246,7 +246,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954299036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.047, y: -0.058, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 446652}
