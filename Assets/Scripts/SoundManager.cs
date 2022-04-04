@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip stressMusicIntro;
     public AudioClip stressMusicMainLoop;
     public AudioClip gameOverSound;
+    public AudioClip combineStarting;
 
 
     public static SoundManager instance = null;		//Allows other scripts to call functions from SoundManager.				
@@ -87,6 +88,12 @@ public class SoundManager : MonoBehaviour
     {
         StopMusic();
         musicSource.PlayOneShot(gameOverSound);
+    }
+
+    public void StartCombine()
+    {
+        StopMusic();
+        musicSource.PlayOneShot(combineStarting);
     }
 
     public void Credits()

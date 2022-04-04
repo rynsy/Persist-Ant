@@ -26,6 +26,10 @@ public class IntroController : MonoBehaviour
         {
             introImages[imageCounter].SetActive(true);
             imageCounter += 1;
+            if (imageCounter == 3)
+            {
+                SoundManager.instance.StartCombine();
+            }
             yield return new WaitForSeconds(transitionDelay);
         }
             yield return new WaitForSeconds(1.8f);
