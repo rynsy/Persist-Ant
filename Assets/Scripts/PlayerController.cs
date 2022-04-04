@@ -44,6 +44,7 @@ public class PlayerController :  MonoBehaviour
 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float chargeForce = 1.5f;
+    [SerializeField] private float bounceBackForce = 5f;
 
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
@@ -62,6 +63,7 @@ public class PlayerController :  MonoBehaviour
     private float slopeDownAngle;
     private float slopeSideAngle;
     private float lastSlopeAngle;
+    private float oldGravityScale;
 
     private Vector2 newVelocity; 
     private Vector2 newForce; 
@@ -88,7 +90,7 @@ public class PlayerController :  MonoBehaviour
     private int _time = 0;
     private DateTime startTime = System.DateTime.Now;
     private DateTime endTime = System.DateTime.Now;
-    
+
     // Variables that need fancy getters/setters to couple variables to actions
     public int Time
     {
@@ -137,12 +139,6 @@ public class PlayerController :  MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         capsuleColliderSize = capsuleCollider.size;
 
-
-        if (playerCamera == null)
-        {
-            playerCamera = GetComponent<Camera>();
-        }
-
         // Set state for game start
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
@@ -174,13 +170,11 @@ public class PlayerController :  MonoBehaviour
             {
                 newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
                 playMoveSound = true;
-            } else if (!isGrounded)
+            } else if (!isGrounded || isJumping)
             {
                 newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
                 playMoveSound = false;
-            }  else if (isJumping)
-            {
-                newVelocity = rigidBodyComponent.velocity; // fixes race condition
+                SwitchAnimation("jump");
             }
             if (moveDir.x != 0) // Player is moving in some direction
             {
@@ -226,11 +220,17 @@ public class PlayerController :  MonoBehaviour
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
         {
-            TakeDamage();
+            if (!isCharging)
+            {
+                TakeDamage(GetCollisionDirection(other));
+            }
+        } else if (other.tag == "Spike")
+        {
+            TakeDamage(GetCollisionDirection(other));
         } else if (other.tag == "Item")
         {
-            Destroy(other.gameObject);
             SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
+            Destroy(other.gameObject);
             ApplySpeedBoost();
         }
         else if (other.tag == "HealthItem")
@@ -240,6 +240,21 @@ public class PlayerController :  MonoBehaviour
             Health += 1;
         }
     }
+
+    private Vector2 GetCollisionDirection(Collider2D other)
+    {
+        Vector2 bounceBackDir;
+        if (other.transform.position.x >= transform.position.x)
+        {   // enemy is on the right
+            bounceBackDir = new Vector2(-1 * bounceBackForce, bounceBackForce * 2);
+        } else
+        {
+            bounceBackDir = new Vector2(1 * bounceBackForce, bounceBackForce * 2);
+        }
+        Debug.Log("BounceBack Direction: " + bounceBackDir);
+        return bounceBackDir;
+    }
+
 
     private void Move(Vector2 dir, bool playWalkSound)
     {
@@ -379,13 +394,23 @@ public class PlayerController :  MonoBehaviour
     {
         if (canCharge)
         {
+            Debug.Log("Charging");
             canCharge = false;
             isCharging = true;
-            int dir = (PlayerFacingRight) ? 1 : -1;
+
             newVelocity.Set(0.0f, 0.0f);
             rigidBodyComponent.velocity = newVelocity;
-            newForce.Set(dir * chargeForce, 0.0f);
-            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+            oldGravityScale = rigidBodyComponent.gravityScale;
+            rigidBodyComponent.gravityScale = 0;
+            if (PlayerFacingRight)
+            {
+                rigidBodyComponent.velocity = Vector2.right * chargeForce * playerSpeed;
+            } else
+            {
+                rigidBodyComponent.velocity = -Vector2.right * chargeForce * playerSpeed;
+            }
+ //           newForce.Set(dir * chargeForce, 0.0f);
+//            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
 
             SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
             SwitchAnimation("charge");
@@ -408,6 +433,7 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoost()
     {
         isCharging = false;
+        rigidBodyComponent.gravityScale = oldGravityScale;
     }
 
     private void RemoveChargeBoostCooldown()
@@ -451,11 +477,20 @@ public class PlayerController :  MonoBehaviour
     // Ensure that boolean values that control states are mutually exclusive
     private void SwitchAnimation(string param)
     {
-        if (!isGrounded && param != "jump")
+        
+        if (!isGrounded && ((param == "jump") || (param == "charge")))
+        {
+            if (isCharging) { param = "charge"; }
+            UnsetAllAnimations();
+            animatorComponent.SetBool(param, true);
+            return;
+        }
+
+        if (!isGrounded && (param != "jump"))
         {
             return;
         }
-        if (isCharging && param != "charge")
+        if (isCharging && (param != "charge"))
         {
             return;
         }
@@ -468,21 +503,29 @@ public class PlayerController :  MonoBehaviour
             return;
         }
 
+        UnsetAllAnimations();
+        animatorComponent.SetBool(param, true);
+    }
+
+    private void UnsetAllAnimations()
+    {
         foreach (string s in animationParameters)
         {
             animatorComponent.SetBool(s, false);
         }
 
-        animatorComponent.SetBool(param, true);
     }
 
 
-    private void TakeDamage()
+    private void TakeDamage(Vector2 bounceBackDir)
     {
         SwitchAnimation("hurt");
         isTakingDamage = true;
         SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
         Health -= 1;
+
+        Move(bounceBackDir, false);
+
         if (Health <= 0)
         {
             Invoke("Die", 1f);

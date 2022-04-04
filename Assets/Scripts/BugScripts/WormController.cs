@@ -27,16 +27,16 @@ public class WormController : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         // Call Coroutine to dissolve platform
-        if (collision.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            if (other.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;
