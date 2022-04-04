@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82, y: 0.3}
+  m_Size: {x: 0.8, y: 0.29}
   m_EdgeRadius: 0
 --- !u!50 &5046652
 Rigidbody2D:
@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
+  cameraPrefab: {fileID: 0}
   playerHealth: 3
   playerSpeed: 5
   speedBoostFactor: 2
