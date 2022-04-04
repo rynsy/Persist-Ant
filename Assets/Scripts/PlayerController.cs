@@ -248,6 +248,10 @@ public class PlayerController :  MonoBehaviour
             SoundManager.instance.PlaySingleSoundEffect(healthItemSound);
             Destroy(other.gameObject);
             Health += 1;
+        } else if (other.tag == "Combine")
+        {
+            Health = 0;
+            TakeDamage();
         }
     }
 
