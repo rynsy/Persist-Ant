@@ -5,6 +5,8 @@ public class FlyController : MonoBehaviour
     private float counter;
     private const float damp = 0.001f;
 
+    public ParticleSystem blood;
+
     private GameObject player;
     private Animator animatorComponent;
     private Rigidbody2D rigidbodyComponent;
@@ -44,20 +46,25 @@ public class FlyController : MonoBehaviour
             {
                 SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
                 animatorComponent.SetTrigger("FlyDead");
+                blood.Play();
             }
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
-                rigidbodyComponent.simulated = false;
-                SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
-                animatorComponent.SetTrigger("FlyDead");
+                Kill();
             }
         } else if (other.gameObject.tag == "Combine")
         {
-            rigidbodyComponent.simulated = false;
-            SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
-            animatorComponent.SetTrigger("FlyDead"); //TODO: May need to change this
+            Kill();
         }
+    }
+
+    public void Kill()
+    {
+        rigidbodyComponent.simulated = false;
+        SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
+        animatorComponent.SetTrigger("FlyDead");
+        blood.Play();
     }
 
     public void DestroyFly()
