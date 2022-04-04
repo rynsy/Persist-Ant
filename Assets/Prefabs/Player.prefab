@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82, y: 0.3}
+  m_Size: {x: 0.8, y: 0.29}
   m_EdgeRadius: 0
 --- !u!50 &5046652
 Rigidbody2D:
@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
+  cameraPrefab: {fileID: 0}
   playerHealth: 3
   playerSpeed: 5
   speedBoostFactor: 2
@@ -179,12 +180,12 @@ MonoBehaviour:
   levelTimeText: {fileID: 0}
   playerHealthText: {fileID: 0}
   moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
-  playerHurtSound: {fileID: 0}
-  genericItemSound: {fileID: 0}
-  healthItemSound: {fileID: 0}
-  playerJumpSound: {fileID: 0}
-  playerBounceSound: {fileID: 0}
-  playerChargeSound: {fileID: 0}
+  playerHurtSound: {fileID: 8300000, guid: 79d3cac87a980334bb27e642dcb419bb, type: 3}
+  genericItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
+  healthItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
+  playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
+  playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
+  playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
   canJump: 1
   canCharge: 1
   canMove: 1

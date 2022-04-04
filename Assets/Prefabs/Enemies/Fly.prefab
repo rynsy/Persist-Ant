@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65c4488ae10c854085654631e4eec75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyDeathSound: {fileID: 0}
+  flyDeathSound: {fileID: 8300000, guid: 6a6c995d16c49a247a1cabb82c79a99b, type: 3}
   motionTriggerRadius: 10
   flySpeed: 28
   bobFactor: 0.01
