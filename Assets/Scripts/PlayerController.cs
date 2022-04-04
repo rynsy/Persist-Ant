@@ -62,6 +62,7 @@ public class PlayerController :  MonoBehaviour
     private float slopeDownAngle;
     private float slopeSideAngle;
     private float lastSlopeAngle;
+    private float oldGravityScale;
 
     private Vector2 newVelocity; 
     private Vector2 newForce; 
@@ -377,6 +378,7 @@ public class PlayerController :  MonoBehaviour
 
             newVelocity.Set(0.0f, 0.0f);
             rigidBodyComponent.velocity = newVelocity;
+            oldGravityScale = rigidBodyComponent.gravityScale;
             rigidBodyComponent.gravityScale = 0;
             if (PlayerFacingRight)
             {
@@ -409,7 +411,7 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoost()
     {
         isCharging = false;
-        rigidBodyComponent.gravityScale = 9;
+        rigidBodyComponent.gravityScale = oldGravityScale;
     }
 
     private void RemoveChargeBoostCooldown()
@@ -453,6 +455,15 @@ public class PlayerController :  MonoBehaviour
     // Ensure that boolean values that control states are mutually exclusive
     private void SwitchAnimation(string param)
     {
+        
+        if (!isGrounded && ((param == "jump") || (param == "charge")))
+        {
+            if (isCharging) { param = "charge"; }
+            UnsetAllAnimations();
+            animatorComponent.SetBool(param, true);
+            return;
+        }
+
         if (!isGrounded && (param != "jump"))
         {
             return;
@@ -470,15 +481,17 @@ public class PlayerController :  MonoBehaviour
             return;
         }
 
+        UnsetAllAnimations();
+        animatorComponent.SetBool(param, true);
+    }
+
+    private void UnsetAllAnimations()
+    {
         foreach (string s in animationParameters)
         {
-            if (s != param)
-            {
-                animatorComponent.SetBool(s, false);
-            }
+            animatorComponent.SetBool(s, false);
         }
 
-        animatorComponent.SetBool(param, true);
     }
 
 
