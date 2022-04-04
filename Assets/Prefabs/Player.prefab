@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 446652}
   - component: {fileID: 21246652}
   - component: {fileID: 9546652}
-  - component: {fileID: 6146652}
   - component: {fileID: 5046652}
   - component: {fileID: 11446652}
+  - component: {fileID: 1946762727}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -106,32 +106,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &6146652
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 146652}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.82, y: 0.33}
-    newSize: {x: 0.82, y: 0.33}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.29}
-  m_EdgeRadius: 0
 --- !u!50 &5046652
 Rigidbody2D:
   serializedVersion: 4
@@ -167,16 +141,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
   dust: {fileID: 1729242685}
-  playerHealth: 3
-  playerSpeed: 5
-  speedBoostFactor: 2
-  jumpFactor: 5
-  bouncePadJumpFactor: 10
-  speedBoostDuration: 10
-  chargeBoostFactor: 2
-  chargeBoostDuration: 0.4
-  chargeBoostCooldown: 0
-  parallaxSpeed: 1
   parallaxComponent: {fileID: 0}
   levelTimeText: {fileID: 0}
   playerHealthText: {fileID: 0}
@@ -187,14 +151,47 @@ MonoBehaviour:
   playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
+  playerHealth: 3
+  playerSpeed: 5
+  speedBoostFactor: 2
+  jumpFactor: 5
+  bouncePadJumpFactor: 10
+  speedBoostDuration: 10
+  chargeBoostFactor: 2
+  chargeBoostDuration: 0.4
+  chargeBoostCooldown: 0
+  parallaxSpeed: 1
+  groundCheckRadius: 0
+  slopeCheckDistance: 0
+  maxSlopeAngle: 0
+  groundCheck: {fileID: 0}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  noFriction: {fileID: 0}
+  fullFriction: {fileID: 0}
   canJump: 1
   canCharge: 1
   canMove: 1
   isDead: 0
   isJumping: 0
   isCharging: 0
-  isTakingDamage: 0
-  onGround: 0
+--- !u!70 &1946762727
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146652}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.1}
+  m_Size: {x: 0.8, y: 0.1}
+  m_Direction: 1
 --- !u!1 &1729242684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1733,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2

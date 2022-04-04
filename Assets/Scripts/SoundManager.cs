@@ -66,6 +66,7 @@ public class SoundManager : MonoBehaviour
     {
         if (!walkSoundSource.isPlaying)
         {
+            walkSoundSource.loop = true;
             walkSoundSource.PlayOneShot(clip, 0.5f);
         }
     }

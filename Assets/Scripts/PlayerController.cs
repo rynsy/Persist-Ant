@@ -7,27 +7,24 @@ using System;
 //Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 public class PlayerController :  MonoBehaviour
 {
+    private const int BOTTOM_OF_WORLD = -20;
+
+    // Components
     public Camera playerCamera;
     public ParticleSystem dust;
-
-    [SerializeField] private int playerHealth = 3;
-    [SerializeField] private int playerSpeed = 5;
-    [SerializeField] private int speedBoostFactor = 2;
-    [SerializeField] private float jumpFactor = 5f;
-    [SerializeField] private float bouncePadJumpFactor = 10f;
-    [SerializeField] private float speedBoostDuration = 10f;
-    [SerializeField] private float chargeBoostFactor = 1.5f;
-    [SerializeField] private float chargeBoostDuration = 0.5f;
-    [SerializeField] private float chargeBoostCooldown = 5f;
-    [SerializeField] private float parallaxSpeed;
-
     public FreeParallax parallaxComponent;
     private Rigidbody2D rigidBodyComponent;
-
-    private Vector2 moveDir; 
+    private Animator animatorComponent;
+    private CapsuleCollider2D capsuleCollider;
     
+    // All the states
+    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
+
+    // HUD
     public Text levelTimeText;
     public Text playerHealthText;
+
+    // Sound
     public AudioClip moveSound1;
     public AudioClip playerHurtSound;
     public AudioClip genericItemSound;
@@ -36,28 +33,65 @@ public class PlayerController :  MonoBehaviour
     public AudioClip playerBounceSound;
     public AudioClip playerChargeSound;
 
-    private Animator animator;                  //Used to store a reference to the Player's animator component.
-    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
+    // Movement Vectors
+    private Vector2 moveDir; 
+    private Vector2 chargeDir; 
+
+    // Player Parameters
+    [SerializeField] private int playerHealth = 3;
+    [SerializeField] private int playerSpeed = 5;
+    [SerializeField] private int speedBoostFactor = 2;
+
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float chargeForce = 1.5f;
+
+    [SerializeField] private float bouncePadJumpFactor = 10f;
+    [SerializeField] private float speedBoostDuration = 10f;
+    [SerializeField] private float chargeBoostDuration = 0.5f;
+    [SerializeField] private float chargeBoostCooldown = 5f;
+    [SerializeField] private float parallaxSpeed;
+
+    // Slope/collision resolution parameters
+    [SerializeField] private float groundCheckRadius;
+    [SerializeField] private float slopeCheckDistance;
+    [SerializeField] private float maxSlopeAngle;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private PhysicsMaterial2D noFriction;
+    [SerializeField] private PhysicsMaterial2D fullFriction;
+
+    private float slopeDownAngle;
+    private float slopeSideAngle;
+    private float lastSlopeAngle;
+
+    private Vector2 newVelocity; 
+    private Vector2 newForce; 
+    private Vector2 capsuleColliderSize; 
+    private Vector2 slopeNormalPerp; 
+
+    // Flags
+    private bool _facingRight;
+    private bool jumpButtonPressed;
+    private bool isTakingDamage;        // Hack to make sure hurt animation plays
+    private bool isGrounded;
+    private bool isOnSlope;
+    private bool canWalkOnSlope;
 
     public bool canJump = true;
     public bool canCharge = true;
     public bool canMove = true;
-    private Vector2 chargeDir; 
 
-    public bool isDead = false;
-    public bool isJumping = false;
-    public bool isCharging = false;
-    public bool isTakingDamage = false;
-    public bool onGround;
+    // Exposed for debugging/toggling animations
+    public bool isDead;
+    public bool isJumping;
+    public bool isCharging;
 
-    private bool jumpKeyWasPressed;
-    private bool chargeKeyWasPressed;
-    private bool _facingRight;
-    
+    // Time, if we want to track how long it takes to beat a level
     private int _time = 0;
-   // private DateTime startTime = System.DateTime.Now;
-   // private DateTime endTime = System.DateTime.Now;       //Nice-to-have, time since start. For timing playthroughs
-
+    private DateTime startTime = System.DateTime.Now;
+    private DateTime endTime = System.DateTime.Now;
+    
+    // Variables that need fancy getters/setters to couple variables to actions
     public int Time
     {
         get
@@ -70,7 +104,6 @@ public class PlayerController :  MonoBehaviour
             //TODO: remove time
         }
     }
-
     public int Health
     {
         get
@@ -92,112 +125,106 @@ public class PlayerController :  MonoBehaviour
         set
         {
             _facingRight = value;
-            animator.SetBool("facingRight", _facingRight);
+            animatorComponent.SetBool("facingRight", _facingRight);
         }
     }
 
-    //Start overrides the Start function of MovingObject
-    protected void Start()
+    void Start()
     {
-        //Get a component reference to the Player's animator component
-        animator = GetComponent<Animator>();
+        // Grab components
+        animatorComponent = GetComponent<Animator>();
         rigidBodyComponent = GetComponent<Rigidbody2D>();
         parallaxComponent = GameObject.Find("Background").GetComponentInChildren<FreeParallax>();
+        
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        capsuleColliderSize = capsuleCollider.size;
+
 
         if (playerCamera == null)
         {
             playerCamera = GetComponent<Camera>();
         }
 
-
+        // Set state for game start
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
-        animator.SetBool("idle", true);
+        animatorComponent.SetBool("idle", true);
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jumpKeyWasPressed = true;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            chargeKeyWasPressed = true;
-        }
-        moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        CheckInput();
     }
-
 
     private void FixedUpdate()
     {
+        CheckGround();
+        SlopeCheck();
+        ApplyMovement();
+    }
+
+    private void ApplyMovement()
+    {
+        bool playMoveSound = false;
         if (canMove)
         {
-            if (!isCharging)
-            {
-                PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
-                                        || (moveDir.x > 0);
-                if (moveDir.x != 0) // Player is moving in some direction
-                {
-                    SwitchAnimation("run");
-                }
-                else
-                {
-                    SwitchAnimation("idle");
-                }
-                Move(new Vector2(moveDir.x * playerSpeed, rigidBodyComponent.velocity.y));
-            }
-            else
-            {
-                Charge();
-            }
+            //newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
+            //rigidBodyComponent.velocity = newVelocity;
 
-            if (jumpKeyWasPressed && canJump)
+            if (isGrounded && !isOnSlope)
             {
-                Jump(jumpFactor);                         // This sets jumpKeyPressed to false
-            }
-            else
+                newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
+                playMoveSound = true;
+            } else if (isGrounded && isOnSlope)
             {
-                jumpKeyWasPressed = false;      // Need to be sure this gets reset. probably a cleaner way of writing this
-            }
+                newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
+                playMoveSound = true;
 
-            if (chargeKeyWasPressed && canCharge)
+            } else if (!isGrounded)
             {
-                StartCharge();
-            }
-            else
+                newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
+                playMoveSound = false;
+            } 
+            if (moveDir.x != 0) // Player is moving in some direction
             {
-                chargeKeyWasPressed = false;
+                SwitchAnimation("run");
+            } else
+            {
+                SwitchAnimation("idle");
             }
+            playMoveSound = playMoveSound && moveDir.x != 0; //Ensure sount plays when we want and we're moving
+
+            Move(newVelocity, playMoveSound);
         }
-        if (rigidBodyComponent.position.y < -10)
+
+        if (rigidBodyComponent.position.y < BOTTOM_OF_WORLD)    //Always check this
         {
             GameOver();
         }
 
         Time += 1;
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Colliding with: " + collision.gameObject.name);
+
         if (collision.gameObject.tag == "Platform")
         {
             canJump = true;
-            isJumping = false;
-            onGround = true;
+            Debug.Log("Setting isGrounded to true");
+            isGrounded = true;
             SwitchAnimation("idle");            //TODO: Need to experiment with this
         } else if (collision.gameObject.tag == "BouncePad")
         {
-            Jump(bouncePadJumpFactor);
+            // TODO: initiate bounce. Possibly won't need this, but will definitely need to play the sound, maybe the jump animation
             SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
         }
     }
 
-    //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        Debug.Log("Colliding with: " + other.name); 
-        // Raycast down to see if standing on "something"
+        Debug.Log("Triggered by: " + other.name);
 
         //Check if the tag of the trigger collided with is Exit.
         if (other.tag == "Enemy")
@@ -217,12 +244,12 @@ public class PlayerController :  MonoBehaviour
         }
     }
 
-
-    private void Move(Vector2 dir)
+    private void Move(Vector2 dir, bool playWalkSound)
     {
         //play move sound
-        if (onGround && rigidBodyComponent.velocity.x != dir.x)
+        if (playWalkSound)
         {
+            Debug.Log("Playing Walk Sound");
             SoundManager.instance.PlayWalkSound(moveSound1);
             dust.Play();
         } 
@@ -232,38 +259,139 @@ public class PlayerController :  MonoBehaviour
             dust.Stop();
         }
 
-        UpdateParallax();
         rigidBodyComponent.velocity = dir;
-        playerCamera.transform.position = new Vector3(rigidBodyComponent.position.x, (float)(rigidBodyComponent.position.y + 3.5), -10);
+        UpdateCameraPosition();
     }
 
-    private void Jump(float j)
+    private void CheckInput()
     {
-        jumpKeyWasPressed = false;
-        isJumping = true;
-        canJump = false;
-        onGround = false;
-        SwitchAnimation("jump");
-        SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
-        Move(new Vector2(rigidBodyComponent.velocity.x, transform.up.y * j));
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Charge();
+        }
+        moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
+                                || (moveDir.x > 0);
     }
 
-    private void StartCharge()
+    private void CheckGround()
     {
-        chargeKeyWasPressed = false;
-        canCharge = false;
-        isCharging = true;
-        chargeDir = moveDir;
-        SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
-        Invoke("RemoveChargeBoost", chargeBoostDuration);
-        Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+        if (rigidBodyComponent.velocity.y <= 0.0f)
+        {
+            isJumping = false;  //You've hit the top of the jump arc, now you're falling.
+        }
+        if(isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
+        {
+            canJump = true;
+        }
+    }
+
+    private void SlopeCheck()
+    {
+        Vector2 checkPos = transform.position - (Vector3)(new Vector2(0.0f, 2 / 2)); //TODO: add capsuleCollider to y
+        SlopeCheckHorizontal(checkPos);
+        SlopeCheckVertical(checkPos);
+    }
+
+    private void SlopeCheckHorizontal(Vector2 checkPos)
+    {
+        RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, slopeCheckDistance, whatIsGround);
+        RaycastHit2D slopeHitBack = Physics2D.Raycast(checkPos, -transform.right, slopeCheckDistance, whatIsGround);
+        
+        if (slopeHitFront)
+        {
+            isOnSlope = true;
+            slopeSideAngle = Vector2.Angle(slopeHitFront.normal, Vector2.up);
+        } else if (slopeHitBack)
+        {
+            isOnSlope = true;
+            slopeSideAngle = Vector2.Angle(slopeHitBack.normal, Vector2.up);
+        } else
+        {
+            slopeSideAngle = 0.0f;
+            isOnSlope = false;
+        }
+    }
+
+    private void SlopeCheckVertical(Vector2 checkPos)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, slopeCheckDistance, whatIsGround);
+        if (hit)
+        {
+            slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
+            slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
+            if(slopeDownAngle != lastSlopeAngle)
+            {
+                isOnSlope = true;
+            }
+            lastSlopeAngle = slopeDownAngle;
+            Debug.DrawRay(hit.point, slopeNormalPerp, Color.blue);
+            Debug.DrawRay(hit.point, hit.normal, Color.green);
+        }
+
+        if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
+        {
+            canWalkOnSlope = false;
+        } else
+        {
+            canWalkOnSlope = true;
+        }
+
+        if (!isOnSlope && canWalkOnSlope && moveDir.x == 0.0f)
+        {
+            rigidBodyComponent.sharedMaterial = fullFriction;
+        } else
+        {
+            rigidBodyComponent.sharedMaterial = noFriction;
+        }
+    }
+
+    private void Jump()
+    {
+        if (canJump)
+        {
+            isJumping = true;
+            canJump = false;
+            Debug.Log("Setting isGrounded to false");
+            isGrounded = false;
+            SwitchAnimation("jump");
+            SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
+
+            newVelocity.Set(0.0f, 0.0f);
+            rigidBodyComponent.velocity = newVelocity;
+
+            newForce.Set(0.0f, jumpForce);
+            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+            UpdateCameraPosition();
+        }
     }
 
     private void Charge()
     {
-        SwitchAnimation("charge");
-        Move(new Vector2(chargeDir.x * playerSpeed * chargeBoostFactor, chargeDir.y * playerSpeed * chargeBoostFactor));
+        if (canCharge)
+        {
+            canCharge = false;
+            isCharging = true;
+            rigidBodyComponent.sharedMaterial = noFriction;
+            int dir = (PlayerFacingRight) ? 1 : -1;
+            newVelocity.Set(0.0f, 0.0f);
+            rigidBodyComponent.velocity = newVelocity;
+            newForce.Set(dir * chargeForce, 0.0f);
+            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+
+            SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
+            SwitchAnimation("charge");
+            Invoke("RemoveChargeBoost", chargeBoostDuration);
+            Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
+            UpdateCameraPosition();
+        }
     }
+
     private void ApplySpeedBoost()
     {
         playerSpeed *= speedBoostFactor;
@@ -277,6 +405,7 @@ public class PlayerController :  MonoBehaviour
     private void RemoveChargeBoost()
     {
         isCharging = false;
+        rigidBodyComponent.sharedMaterial = fullFriction;
     }
 
     private void RemoveChargeBoostCooldown()
@@ -288,7 +417,7 @@ public class PlayerController :  MonoBehaviour
     {
         if (parallaxComponent != null)
         {
-            if(animator.GetBool("idle"))
+            if(animatorComponent.GetBool("idle"))
             {
                 parallaxComponent.Speed = 0.0f;
             } else
@@ -309,9 +438,22 @@ public class PlayerController :  MonoBehaviour
         //TODO: Change the health display to have current value of Health
     }
 
+    private void UpdateCameraPosition()
+    { 
+        Vector2 pos = rigidBodyComponent.position;
+        Vector3 newCameraPos = new Vector3(pos.x, pos.y + 3.5f, -10.0f);
+        playerCamera.transform.position = newCameraPos;
+        UpdateParallax();
+    }
+
+    // Ensure that boolean values that control states are mutually exclusive
     private void SwitchAnimation(string param)
     {
-        if (isJumping && param != "jump")
+        if (!isGrounded && param != "jump")
+        {
+            return;
+        }
+        if (isCharging && param != "charge")
         {
             return;
         }
@@ -319,17 +461,17 @@ public class PlayerController :  MonoBehaviour
         {
             return;
         }
-        if (isTakingDamage)
+        if (isTakingDamage) // hack to get hurt to work
         {
             return;
         }
 
         foreach (string s in animationParameters)
         {
-            animator.SetBool(s, false);
+            animatorComponent.SetBool(s, false);
         }
 
-        animator.SetBool(param, true);
+        animatorComponent.SetBool(param, true);
     }
 
 
@@ -345,11 +487,12 @@ public class PlayerController :  MonoBehaviour
         }
     }
 
+    // Hack to ensure hurt animation completes. Called from animation event
     private void DamageAnimationDone()
     {
         isTakingDamage = false;
-        animator.SetBool("hurt", false);
-        animator.SetBool("idle", true);
+        animatorComponent.SetBool("hurt", false);
+        animatorComponent.SetBool("idle", true);
     }
 
     private void Die()
