@@ -4,6 +4,7 @@ using System.Collections;
 public class SoundManager : MonoBehaviour 
 {
     public AudioSource efxSource;					//Drag a reference to the audio source which will play the sound effects.
+    public AudioSource walkSoundSource;					//Drag a reference to the audio source which will play the sound effects.
     public AudioSource chillMusicSource;					//Drag a reference to the audio source which will play the music.
     public AudioSource stressfulMusicSource;					//Drag a reference to the audio source which will play the music.
     public AudioSource gameoverMusicSource;					//Drag a reference to the audio source which will play the music.
@@ -58,11 +59,23 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySingleSoundEffect(AudioClip clip)
     {
-        if (!efxSource.isPlaying)
+        efxSource.PlayOneShot(clip, 1f);
+    }
+
+    public void PlayWalkSound(AudioClip clip)
+    {
+        if (!walkSoundSource.isPlaying)
         {
-            efxSource.PlayOneShot(clip, 1f);
+            walkSoundSource.PlayOneShot(clip, 0.5f);
         }
     }
+
+    public void StopWalkSound()
+    {
+        walkSoundSource.loop = false;
+        walkSoundSource.Stop();
+    }
+
     public void StopSoundEffects()
     {
         efxSource.loop = false;

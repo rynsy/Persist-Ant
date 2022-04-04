@@ -222,10 +222,10 @@ public class PlayerController :  MonoBehaviour
         //play move sound
         if (onGround && rigidBodyComponent.velocity.x != dir.x)
         {
-            SoundManager.instance.PlaySingleSoundEffect(moveSound1);
+            SoundManager.instance.PlayWalkSound(moveSound1);
         } else if (rigidBodyComponent.velocity.x == dir.x)
         {
-            SoundManager.instance.StopSoundEffects();
+            SoundManager.instance.StopWalkSound();
         }
 
         UpdateParallax();
@@ -250,6 +250,7 @@ public class PlayerController :  MonoBehaviour
         canCharge = false;
         isCharging = true;
         chargeDir = moveDir;
+        SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
         Invoke("RemoveChargeBoost", chargeBoostDuration);
         Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
     }
@@ -257,7 +258,6 @@ public class PlayerController :  MonoBehaviour
     private void Charge()
     {
         SwitchAnimation("charge");
-        SoundManager.instance.PlaySingleSoundEffect(playerChargeSound); //TODO: this may need to go into StartCharge
         Move(new Vector2(chargeDir.x * playerSpeed * chargeBoostFactor, chargeDir.y * playerSpeed * chargeBoostFactor));
     }
     private void ApplySpeedBoost()
