@@ -25,6 +25,7 @@ public class PlayerController :  MonoBehaviour
     // HUD
     public Text levelTimeText;
     public Text playerHealthText;
+    [SerializeField] private HealthController healthIndicator;
 
     // Sound
     public AudioClip moveSound1;
@@ -42,10 +43,8 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int playerSpeed = 5;
     [SerializeField] private int speedBoostFactor = 2;
-
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float chargeForce = 1.5f;
-
     [SerializeField] private float speedBoostDuration = 10f;
     [SerializeField] private float chargeBoostDuration = 0.5f;
     [SerializeField] private float chargeBoostCooldown = 5f;
@@ -113,7 +112,7 @@ public class PlayerController :  MonoBehaviour
         set
         {
             playerHealth = value;
-            UpdateHealthDisplay();
+            healthIndicator.SetHealth(playerHealth);
         }
     }
     public bool PlayerFacingRight
@@ -460,11 +459,6 @@ public class PlayerController :  MonoBehaviour
         }
     }
 
-    private void UpdateHealthDisplay()
-    {
-        //TODO: Change the health display to have current value of Health
-    }
-
     private void UpdateCameraPosition()
     { 
         Vector2 pos = rigidBodyComponent.position;
@@ -546,14 +540,6 @@ public class PlayerController :  MonoBehaviour
         isDead = true;
         SwitchAnimation("die");
         Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
-    }
-
-    //Restart reloads the scene when called.
-    public void ResetHealth()
-    {
-        //Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
-        //and not load all the scene object in the current scene.
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     private void GameOver()
