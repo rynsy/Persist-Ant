@@ -47,14 +47,9 @@ public class GameManager : MonoBehaviour
             Debug.Log("Setting up the scene");
             
             //Load Level
-            SceneManager.LoadScene(sceneName: "DebugScene");
+            //SceneManager.LoadScene(sceneName: "DebugScene");
 
             // Create the player, set location to "PlayerStartLocation" in the scene after its setup
-            PlayerController player = Instantiate(playerPrefab);
-            Camera camera = Instantiate(cameraPrefab);
-            GameObject startLocation = GameObject.Find("PlayerStart");
-            player.transform.position = startLocation.transform.position;
-
             Invoke("StartLevel", levelStartDelay);
         }
     }
