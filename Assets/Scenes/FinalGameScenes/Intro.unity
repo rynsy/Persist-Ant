@@ -427,7 +427,7 @@ MonoBehaviour:
   - {fileID: 2093188088}
   - {fileID: 218257754}
   - {fileID: 1680504705}
-  transitionDelay: 8
+  transitionDelay: 6.5
 --- !u!1001 &1448250677
 PrefabInstance:
   m_ObjectHideFlags: 0
