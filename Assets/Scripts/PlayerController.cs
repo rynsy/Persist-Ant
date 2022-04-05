@@ -217,9 +217,22 @@ public class PlayerController :  MonoBehaviour
     {
         Debug.Log("Colliding with: " + collision.gameObject.name);
 
-        if (collision.gameObject.tag == "Platform")
+        if (collision.gameObject.tag == "BreakBlock")
         {
-            //SwitchAnimation("idle");            //TODO: Need to experiment with this
+            if (isCharging)
+            {
+                collision.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+                // TODO: Need to be able to set the whole wall to dynamic. I've tried grouping them into one object and doing the above for all children, but no luck.
+/*                var children = collision.gameObject.GetComponentsInChildren<Rigidbody2D>();
+                foreach(Rigidbody2D child in children)
+                {
+                    child.bodyType = RigidbodyType2D.Dynamic;
+                }
+*/
+
+            }
+
         } else if (collision.gameObject.tag == "BouncePad")
         {
             if ( collision.collider.sharedMaterial != null  
@@ -425,10 +438,10 @@ public class PlayerController :  MonoBehaviour
             rigidBodyComponent.mass = chargingMass;
             if (PlayerFacingRight)
             {
-                rigidBodyComponent.velocity = Vector2.right * chargeForce * playerSpeed;
+                rigidBodyComponent.AddRelativeForce(Vector2.right * chargeForce * playerSpeed);
             } else
             {
-                rigidBodyComponent.velocity = -Vector2.right * chargeForce * playerSpeed;
+                rigidBodyComponent.AddRelativeForce(-Vector2.right * chargeForce * playerSpeed);
             }
 
             SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
@@ -484,7 +497,7 @@ public class PlayerController :  MonoBehaviour
     private void UpdateCameraPosition()
     { 
         Vector2 pos = rigidBodyComponent.position;
-        Vector3 newCameraPos = new Vector3(pos.x, pos.y + 3.5f, -10.0f);
+        Vector3 newCameraPos = new Vector3(pos.x, pos.y + 1.5f, -10.0f);
         playerCamera.transform.position = newCameraPos;
         UpdateParallax();
     }
