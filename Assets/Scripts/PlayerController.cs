@@ -267,7 +267,7 @@ public class PlayerController :  MonoBehaviour
         } else if (other.tag == "CombineTriggerStart")
         {
             combine.transform.position = combineSpawn.transform.position;
-            combine.combineSpeed = oldCombineSpeed;
+            combine.combineSpeed = 1;
         } else if (other.tag == "End")
         {
             Debug.Log("FUCK");
