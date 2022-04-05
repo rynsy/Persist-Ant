@@ -270,6 +270,7 @@ public class PlayerController :  MonoBehaviour
             combine.combineSpeed = oldCombineSpeed;
         } else if (other.tag == "End")
         {
+            Debug.Log("FUCK");
             GameManager.instance.WinGame();
         }
     }
