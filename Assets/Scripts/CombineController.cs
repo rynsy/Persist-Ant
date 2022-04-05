@@ -9,10 +9,11 @@ public class CombineController : MonoBehaviour
     public AudioClip combineGrindBugSound; 
 
     public float combineSpeed = 1f;
-    public float damp = 0.001f;
+    public float damp = 0.1f;
 
     private void FixedUpdate()
     {
         transform.position = new Vector2(transform.position.x + (damp *  combineSpeed), transform.position.y );
     }
+
 }

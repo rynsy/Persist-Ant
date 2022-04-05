@@ -10,6 +10,10 @@ public class PlayerController :  MonoBehaviour
     private const int BOTTOM_OF_WORLD = -20;
     private const int MAX_HEALTH = 3;
 
+    // Our mortal enemy
+    [SerializeField] private CombineController combine;
+    [SerializeField] private GameObject combineSpawn;
+
     // Components
     public Camera playerCamera;
     public ParticleSystem dust;
@@ -91,6 +95,7 @@ public class PlayerController :  MonoBehaviour
     private int _time = 0;
     private DateTime startTime = System.DateTime.Now;
     private DateTime endTime = System.DateTime.Now;
+    private float oldCombineSpeed;
 
     // Variables that need fancy getters/setters to couple variables to actions
     public int Time
@@ -255,6 +260,17 @@ public class PlayerController :  MonoBehaviour
         {
             Health = 0;
             TakeDamage();
+        } else if (other.tag == "CombineTriggerStop")
+        {
+            oldCombineSpeed = combine.combineSpeed;
+            combine.combineSpeed = 0;
+        } else if (other.tag == "CombineTriggerStart")
+        {
+            combine.transform.position = combineSpawn.transform.position;
+            combine.combineSpeed = oldCombineSpeed;
+        } else if (other.tag == "End")
+        {
+            GameManager.instance.WinGame();
         }
     }
 

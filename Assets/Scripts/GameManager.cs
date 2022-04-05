@@ -90,6 +90,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
+    public void WinGame()
+    {
+        SceneManager.LoadScene("End");
+    }
+
     public void QuitGame()
     {
         SceneManager.LoadScene("StartMenu");
