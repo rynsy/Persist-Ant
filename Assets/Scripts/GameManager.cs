@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject levelPrefab;
     public PlayerController playerPrefab;
 
+    public Vector3 checkPoint;
+
     private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 
     
@@ -31,7 +33,6 @@ public class GameManager : MonoBehaviour
         }
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
-
     }
 
     //Initializes the game for each level.
@@ -39,9 +40,8 @@ public class GameManager : MonoBehaviour
     {
         doingSetup = true;
         Debug.Log("Setting up the scene");
-
-        doingSetup = false;
         StartLevel1();
+        doingSetup = false;
     }
 
     public void StartMenu()
@@ -75,12 +75,11 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        // NOTE: Don't know that we'll need to do much here
     }
    
     public void Restart()
     {
-        StartLevel1();
+        InitGame();
     }
 
     //GameOver is called when the player reaches 0 food points

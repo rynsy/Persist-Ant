@@ -13,9 +13,12 @@ public class PlayerController :  MonoBehaviour
     // Our mortal enemy
     [SerializeField] private CombineController combine;
     [SerializeField] private GameObject combineSpawn;
+    [SerializeField] private GameObject checkPoint;
+    [SerializeField] private GameObject startingPosition;
 
     // Components
     public Camera playerCamera;
+    public Camera cameraPrefab;
     public ParticleSystem dust;
     public ParticleSystem blood;
     public FreeParallax parallaxComponent;
@@ -27,8 +30,6 @@ public class PlayerController :  MonoBehaviour
     string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
 
     // HUD
-    public Text levelTimeText;
-    public Text playerHealthText;
     [SerializeField] private HealthController healthIndicator;
 
     // Sound
@@ -147,7 +148,14 @@ public class PlayerController :  MonoBehaviour
 
         if(playerCamera == null)
         {
-            GameObject.Find("MainCamera");
+            playerCamera = Camera.current;
+        }
+        if (GameManager.instance.checkPoint != Vector3.zero)
+        {
+            transform.position = GameManager.instance.checkPoint;
+        } else
+        {
+            transform.position = startingPosition.transform.position;
         }
 
         // Set state for game start
@@ -160,6 +168,7 @@ public class PlayerController :  MonoBehaviour
     {
         Health = MAX_HEALTH;
     }
+
 
     void Update()
     {
@@ -257,7 +266,11 @@ public class PlayerController :  MonoBehaviour
         } else if (other.tag == "Spike")
         {
             Health = 0;
-            TakeDamage();
+            SwitchAnimation("hurt");
+            SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
+            blood.Play();
+            Die();
+//            TakeDamage();
         } else if (other.tag == "Item")
         {
             SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
@@ -283,8 +296,11 @@ public class PlayerController :  MonoBehaviour
             combine.combineSpeed = 1;
         } else if (other.tag == "End")
         {
-            Debug.Log("FUCK");
+            Debug.Log("We won!");
             GameManager.instance.WinGame();
+        } else if (other.tag == "Checkpoint")
+        {
+            GameManager.instance.checkPoint = other.gameObject.transform.position;
         }
     }
 
@@ -411,9 +427,6 @@ public class PlayerController :  MonoBehaviour
             canJump = false;
             SwitchAnimation("jump");
             SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
-
-            newVelocity.Set(0.0f, 0.0f);
-            rigidBodyComponent.velocity = newVelocity;
 
             newForce.Set(0.0f, jumpForce);
             rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
