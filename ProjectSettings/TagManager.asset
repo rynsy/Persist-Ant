@@ -18,6 +18,7 @@ TagManager:
   - CombineTriggerStop
   - CombineTriggerStart
   - BreakBlock
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

@@ -76,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2108986501
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -6423033329055657676, guid: 36177781c2911664081ab5f597f25c2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -141,12 +141,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225c13ce7c912b54bab34b526c365ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combine: {fileID: 0}
+  combineSpawn: {fileID: 0}
   playerCamera: {fileID: 0}
   dust: {fileID: 1729242685}
   blood: {fileID: 2107182132}
   parallaxComponent: {fileID: 0}
   levelTimeText: {fileID: 0}
   playerHealthText: {fileID: 0}
+  healthIndicator: {fileID: 0}
   moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
   playerHurtSound: {fileID: 8300000, guid: 79d3cac87a980334bb27e642dcb419bb, type: 3}
   genericItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
@@ -159,9 +162,9 @@ MonoBehaviour:
   speedBoostFactor: 2
   jumpForce: 22
   chargeForce: 30
-  speedBoostDuration: 10
+  speedBoostDuration: 11
   chargeBoostDuration: 0.4
-  chargeBoostCooldown: 1
+  chargeBoostCooldown: 0.5
   parallaxSpeed: 1
   chargingMass: 2000
   groundCheckRadius: 0.2
@@ -5005,7 +5008,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2108986501
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: -1
   m_RenderMode: 0
   m_SortMode: 0
@@ -9867,7 +9870,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -967454167
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
