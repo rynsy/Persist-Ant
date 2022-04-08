@@ -53,11 +53,7 @@ public class FlyController : MonoBehaviour
             {
                 Kill();
             }
-        } if (other.gameObject.tag == "Combine")
-        {
-            Kill();
-        }
-        if (other.gameObject.tag == "BreakBlock")
+        } else if (other.gameObject.tag == "Combine")
         {
             Kill();
         }

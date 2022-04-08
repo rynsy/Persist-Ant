@@ -196,7 +196,7 @@ public class PlayerController :  MonoBehaviour
             {
                 newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
                 playMoveSound = true;
-            } else if (!isGrounded | isJumping) //else if (!isGrounded | isJumping)
+            } else if (!isGrounded || isJumping)
             {
                 newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
                 playMoveSound = false;
@@ -518,32 +518,31 @@ public class PlayerController :  MonoBehaviour
     // Ensure that boolean values that control states are mutually exclusive
     private void SwitchAnimation(string param)
     {
-
-        if (!isGrounded && ((param == "jump") | (param == "charge")))
+        
+        if (!isGrounded && ((param == "jump") || (param == "charge")))
         {
             if (isCharging) { param = "charge"; }
-            if (isJumping) { param = "jump"; }
             UnsetAllAnimations();
             animatorComponent.SetBool(param, true);
             return;
         }
 
-        //if (!isGrounded && (param != "jump"))
-        //{
-        //    return;
-        //}
-        //if (isCharging && (param != "charge"))
-        //{
-        //    return;
-        //}
-        //if (isDead && param != "die")
-        //{
-        //    return;
-        //}
-        //if (isTakingDamage) // hack to get hurt to work
-        //{
-        //    return;
-        //}
+        if (!isGrounded && (param != "jump"))
+        {
+            return;
+        }
+        if (isCharging && (param != "charge"))
+        {
+            return;
+        }
+        if (isDead && param != "die")
+        {
+            return;
+        }
+        if (isTakingDamage) // hack to get hurt to work
+        {
+            return;
+        }
 
         UnsetAllAnimations();
         animatorComponent.SetBool(param, true);
