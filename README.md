@@ -20,4 +20,4 @@ TUNES/CODE: [b3b0](www.twitter.com/b3b0wastaken).
 
 
 
-Audio/noises lifted from ZapSplat. All other music original. Please do not rate the audio sound clips.
+Audio/noises lifted from ZapSplat. All other music original.
