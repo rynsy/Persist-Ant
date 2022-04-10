@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerRefactor : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -13,6 +13,11 @@ public class PlayerControllerRefactor : MonoBehaviour
     public float jumpSpeed = 15f;
     public float jumpDelay = 0.25f;
     private float jumpTimer;
+    
+    [Header("Charge Movement")]
+    public float chargeSpeed = 15f;
+    public float chargeDelay = 0.25f;
+    private float chargeTimer;
 
     [Header("Components")]
     public Rigidbody2D rb;
@@ -46,6 +51,10 @@ public class PlayerControllerRefactor : MonoBehaviour
         {
             jumpTimer = Time.time + jumpDelay;
         }
+        if (Input.GetButtonDown("Fire1"))
+        {
+            chargeTimer = Time.time + chargeDelay;
+        }
         animator.SetBool("onGround", onGround);
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
@@ -55,6 +64,10 @@ public class PlayerControllerRefactor : MonoBehaviour
         if (jumpTimer > Time.time && onGround)
         {
             Jump();
+        }
+        if (chargeTimer > Time.time && onGround)
+        {
+            Charge();
         }
 
         modifyPhysics();
@@ -80,6 +93,20 @@ public class PlayerControllerRefactor : MonoBehaviour
         rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         jumpTimer = 0;
         StartCoroutine(JumpSqueeze(0.5f, 1.2f, 0.1f));
+    }
+    void Charge()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        if (facingRight)
+        {
+            rb.AddForce(Vector2.right * chargeSpeed, ForceMode2D.Impulse);
+        } else
+        {
+            rb.AddForce(-Vector2.right * chargeSpeed, ForceMode2D.Impulse);
+        }
+        chargeTimer = 0;
+        animator.SetTrigger("charge");
+        StartCoroutine(JumpSqueeze(1.0f, 0.8f, 0.5f));
     }
     void modifyPhysics()
     {
