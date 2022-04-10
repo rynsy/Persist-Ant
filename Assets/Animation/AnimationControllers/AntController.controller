@@ -70,8 +70,8 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: charge
     m_EventTreshold: 0
-  - m_ConditionMode: 3
-    m_ConditionEvent: horizontal
+  - m_ConditionMode: 1
+    m_ConditionEvent: facingRight
     m_EventTreshold: 0.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1276764121131050022}
@@ -227,7 +227,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
+    m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: horizontal
     m_Type: 1
@@ -433,8 +433,8 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: charge
     m_EventTreshold: 0
-  - m_ConditionMode: 4
-    m_ConditionEvent: horizontal
+  - m_ConditionMode: 2
+    m_ConditionEvent: facingRight
     m_EventTreshold: 0.5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -810504448840600425}
