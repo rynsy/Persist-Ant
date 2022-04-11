@@ -18,4 +18,4 @@ CODE: [rynsy](www.github.com/rynsy).
 
 TUNES/CODE: [b3b0](www.twitter.com/b3b0wastaken).
 
-Audio/noises lifted from ZapSplat. All other music original - edit.
+Audio/noises lifted from ZapSplat. All other music original.
