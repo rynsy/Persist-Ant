@@ -1,74 +1,116 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;   //Allows us to use UI.
+using UnityEngine.SceneManagement;
+using System;
 
-public class PlayerController : MonoBehaviour
+//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
+public class PlayerController :  MonoBehaviour
 {
-    [Header("Horizontal Movement")]
-    public float moveSpeed = 10f;
-    public Vector2 direction;
-    private bool facingRight = true;
+    private const int BOTTOM_OF_WORLD = -20;
+    private const int MAX_HEALTH = 3;
 
-    [Header("Vertical Movement")]
-    public float jumpSpeed = 15f;
-    public float jumpDelay = 0.25f;
-    private float jumpTimer;
-    
-    [Header("Charge Movement")]
-    public float chargeSpeed = 15f;
-    public float chargeDelay = 0.25f;
-    public float chargingMass = 5;
-    public float oldMass;
-    private float chargeTimer;
-    public bool isCharging = false;
-
-    [Header("Components")]
-    public Camera playerCamera;
-    public Rigidbody2D rb;
-    public Animator animator;
-    public LayerMask groundLayer;
-    public GameObject characterHolder;
-    public FreeParallax parallaxComponent;
-    [SerializeField] private float parallaxSpeed;
-    public HealthController healthIndicator;
-    public GameObject checkPoint;
-
-    [Header("Physics")]
-    public float maxSpeed = 7f;
-    public float linearDrag = 4f;
-    public float gravity = 1f;
-    public float fallMultiplier = 5f;
-    public float speedBoostFactor = 2f;
-    public float speedBoostDuration = 10f;
-
-    [Header("Collision")]
-    [SerializeField] private bool onGround = false;
-    [SerializeField] private float groundLength = 0.6f;
-    [SerializeField] private Vector3 colliderOffset;
-
-    [Header("Player")]
-    [SerializeField] private int playerHealth = 3;
-    [SerializeField] private ParticleSystem dust;
-    [SerializeField] private ParticleSystem blood;
-
-    [Header("Sounds")]
-    [SerializeField] private AudioClip moveSound1;
-    [SerializeField] private AudioClip playerHurtSound;
-    [SerializeField] private AudioClip genericItemSound;
-    [SerializeField] private AudioClip healthItemSound;
-    [SerializeField] private AudioClip playerJumpSound;
-    [SerializeField] private AudioClip playerBounceSound;
-    [SerializeField] private AudioClip playerChargeSound;
-
-    [Header("Combine")]
+    // Our mortal enemy
     [SerializeField] private CombineController combine;
     [SerializeField] private GameObject combineSpawn;
-    [SerializeField] private float oldCombineSpeed;
-
-    [Header("Gameplay")]
-    [SerializeField] private bool canMove = true;
+    [SerializeField] private GameObject checkPoint;
     [SerializeField] private GameObject startingPosition;
 
+    // Components
+    public Camera playerCamera;
+    public Camera cameraPrefab;
+    public ParticleSystem dust;
+    public ParticleSystem blood;
+    public FreeParallax parallaxComponent;
+    private Rigidbody2D rigidBodyComponent;
+    private Animator animatorComponent;
+    private CapsuleCollider2D capsuleCollider;
+    
+    // All the states
+    string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
+
+    // HUD
+    [SerializeField] private HealthController healthIndicator;
+
+    // Sound
+    public AudioClip moveSound1;
+    public AudioClip playerHurtSound;
+    public AudioClip genericItemSound;
+    public AudioClip healthItemSound;
+    public AudioClip playerJumpSound;
+    public AudioClip playerBounceSound;
+    public AudioClip playerChargeSound;
+
+    // Movement Vectors
+    private Vector2 moveDir; 
+
+    // Player Parameters
+    [SerializeField] private int playerHealth = 3;
+    [SerializeField] private int playerSpeed = 5;
+    [SerializeField] private int speedBoostFactor = 2;
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float chargeForce = 1.5f;
+    [SerializeField] private float speedBoostDuration = 10f;
+    [SerializeField] private float chargeBoostDuration = 0.5f;
+    [SerializeField] private float chargeBoostCooldown = 5f;
+    [SerializeField] private float parallaxSpeed;
+    [SerializeField] private float chargingMass;
+
+    // Slope/collision resolution parameters
+    [SerializeField] private float groundCheckRadius;
+    [SerializeField] private float slopeCheckDistance;
+    [SerializeField] private float maxSlopeAngle;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private PhysicsMaterial2D noFriction;
+    [SerializeField] private PhysicsMaterial2D fullFriction;
+
+    private float slopeDownAngle;
+    private float slopeSideAngle;
+    private float lastSlopeAngle;
+    private float oldGravityScale;
+    private float oldMass;
+
+    private Vector2 newVelocity; 
+    private Vector2 newForce; 
+    private Vector2 capsuleColliderSize; 
+    private Vector2 slopeNormalPerp; 
+
+    // Flags
+    private bool _facingRight;
+    private bool canWalkOnSlope;
+
+    public bool canJump = true;
+    public bool canCharge = true;
+    public bool canMove = true;
+
+    // Exposed for debugging/toggling animations
+    public bool isTakingDamage;        // Hack to make sure hurt animation plays
+    public bool isOnSlope;
+    public bool isGrounded;
+    public bool isDead;
+    public bool isJumping;
+    public bool isCharging;
+
+    // Time, if we want to track how long it takes to beat a level
+    private int _time = 0;
+    private DateTime startTime = System.DateTime.Now;
+    private DateTime endTime = System.DateTime.Now;
+    private float oldCombineSpeed;
+
+    // Variables that need fancy getters/setters to couple variables to actions
+    public int Time
+    {
+        get
+        {
+            return _time;
+        }
+        set
+        {
+            _time = value;
+            //TODO: remove time
+        }
+    }
     public int Health
     {
         get
@@ -81,9 +123,29 @@ public class PlayerController : MonoBehaviour
             healthIndicator.SetHealth(playerHealth);
         }
     }
-
-    private void Start()
+    public bool PlayerFacingRight
     {
+        get
+        {
+            return _facingRight;
+        }
+        set
+        {
+            _facingRight = value;
+            animatorComponent.SetBool("facingRight", _facingRight);
+        }
+    }
+
+    void Start()
+    {
+        // Grab components
+        animatorComponent = GetComponent<Animator>();
+        rigidBodyComponent = GetComponent<Rigidbody2D>();
+        parallaxComponent = GameObject.Find("Background").GetComponentInChildren<FreeParallax>();
+        
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        capsuleColliderSize = capsuleCollider.size;
+
         if(playerCamera == null)
         {
             playerCamera = Camera.current;
@@ -95,201 +157,72 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = startingPosition.transform.position;
         }
+
+        // Set state for game start
+        PlayerFacingRight = true;
+        moveDir = Vector2.zero;
+        animatorComponent.SetBool("idle", true);
     }
 
-    // Update is called once per frame
+    void Restart()
+    {
+        Health = MAX_HEALTH;
+    }
+
+
     void Update()
     {
-        bool wasOnGround = onGround;
-        onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer);
-
-        if (!wasOnGround && onGround)
-        {
-            StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpTimer = Time.time + jumpDelay;
-        }
-        if (Input.GetButtonDown("Fire1"))
-        {
-            chargeTimer = Time.time + chargeDelay;
-            isCharging = true;
-        }
-        animator.SetBool("onGround", onGround);
-        if (!isCharging)
-        {
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        }
+        CheckInput();
     }
-    void FixedUpdate()
-    {
-        if (canMove)
-        {
-            moveCharacter(direction.x);
-            if (jumpTimer > Time.time && onGround)
-            {
-                Jump();
-            }
-            if (chargeTimer > Time.time && isCharging)
-            {
-                Charge();
-            }
-            modifyPhysics();
-        }
-    }
-    void moveCharacter(float horizontal)
-    {
-        rb.AddForce(Vector2.right * horizontal * moveSpeed);
 
-        if ((horizontal > 0 && !facingRight) || (horizontal < 0 && facingRight))
-        {
-            Flip();
-        }
-        if (Mathf.Abs(rb.velocity.x) > 0)
-        {
-            SoundManager.instance.PlayWalkSound(moveSound1);
-            dust.Play();
-        }
-        if (Mathf.Abs(rb.velocity.x) <= 0.1f)
-        {
-            SoundManager.instance.StopWalkSound();
-            dust.Stop();
-        }
-        if (Mathf.Abs(rb.velocity.x) > maxSpeed)
-        {
-            rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxSpeed, rb.velocity.y);
-        }
-        animator.SetFloat("horizontal", Mathf.Abs(rb.velocity.x));
-        animator.SetFloat("vertical", rb.velocity.y);
+    private void FixedUpdate()
+    {
+//        CheckGround();
+        StartCoroutine("CheckGround");
+        SlopeCheck();
+        ApplyMovement();
         UpdateCameraPosition();
     }
-    void Jump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
-        SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
-        jumpTimer = 0;
-        StartCoroutine(JumpSqueeze(0.5f, 1.2f, 0.1f));
-    }
-    void Charge()
-    {
-        isCharging = true;
-        oldMass = rb.mass;
-        rb.mass = chargingMass;
-        rb.velocity = new Vector2(0, rb.velocity.y);
-        if (facingRight)
-        {
-            rb.AddForce(Vector2.right * chargeSpeed * chargingMass, ForceMode2D.Impulse);
-        } else
-        {
-            rb.AddForce(-Vector2.right * chargeSpeed * chargingMass, ForceMode2D.Impulse);
-        }
-        chargeTimer = 0;
-        animator.SetTrigger("charge");
-        SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
-        StartCoroutine(JumpSqueeze(1.0f, 0.8f, 0.5f));
-        Invoke("DoneCharging", chargeDelay);
-    }
-    private void DoneCharging()
-    {
-        rb.mass = oldMass;
-        isCharging = false;
-    }
-    void modifyPhysics()
-    {
-        bool changingDirections = (direction.x > 0 && rb.velocity.x < 0) || (direction.x < 0 && rb.velocity.x > 0);
 
-        if (onGround)
-        {
-            if (Mathf.Abs(direction.x) < 0.4f || changingDirections)
-            {
-                rb.drag = linearDrag;
-            }
-            else
-            {
-                rb.drag = 0f;
-            }
-            rb.gravityScale = 0;
-        }
-        else
-        {
-            rb.gravityScale = gravity;
-            rb.drag = linearDrag * 0.15f;
-            if (rb.velocity.y < 0)
-            {
-                rb.gravityScale = gravity * fallMultiplier;
-            }
-            else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
-            {
-                rb.gravityScale = gravity * (fallMultiplier / 2);
-            }
-        }
-    }
-    void Flip()
+    private void ApplyMovement()
     {
-        facingRight = !facingRight;
-        animator.SetBool("facingRight", facingRight);
-        transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
-    }
-    IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds)
-    {
-        Vector3 originalSize = Vector3.one;
-        Vector3 newSize = new Vector3(xSqueeze, ySqueeze, originalSize.z);
-        float t = 0f;
-        while (t <= 1.0)
+        bool playMoveSound = false;
+        if (canMove)
         {
-            t += Time.deltaTime / seconds;
-            characterHolder.transform.localScale = Vector3.Lerp(originalSize, newSize, t);
-            yield return null;
-        }
-        t = 0f;
-        while (t <= 1.0)
-        {
-            t += Time.deltaTime / seconds;
-            characterHolder.transform.localScale = Vector3.Lerp(newSize, originalSize, t);
-            yield return null;
-        }
-
-    }
-    private void TakeDamage()
-    {
-        animator.SetTrigger("hurt");
-        SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
-        blood.Play();
-        Health -= 1;
-        if (Health <= 0)
-        {
-            Invoke("Die", 1f);
-        }
-    }
-    private void UpdateCameraPosition()
-    { 
-        Vector2 pos = rb.position;
-        Vector3 newCameraPos = new Vector3(pos.x, pos.y + 1.5f, -10.0f);
-        playerCamera.transform.position = newCameraPos;
-        UpdateParallax();
-    }
-    private void UpdateParallax()
-    {
-        if (parallaxComponent != null)
-        {
-            if (animator.GetFloat("horizontal") == 0.0f)
+            if (isGrounded && !isOnSlope && !isJumping)
             {
-                parallaxComponent.Speed = 0.0f;
+                newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
+                playMoveSound = true;
+            } else if (isGrounded && isOnSlope && canWalkOnSlope && !isJumping)
+            {
+                newVelocity.Set(playerSpeed * slopeNormalPerp.x * -moveDir.x, playerSpeed * slopeNormalPerp.y * -moveDir.x);
+                playMoveSound = true;
+            } else if (!isGrounded || isJumping)
+            {
+                newVelocity.Set(playerSpeed * moveDir.x, rigidBodyComponent.velocity.y);
+                playMoveSound = false;
+                SwitchAnimation("jump");
+            }
+            if (moveDir.x != 0) // Player is moving in some direction
+            {
+                SwitchAnimation("run");
             } else
             {
-                if (animator.GetFloat("horizontal") < 0)
-                {
-                    parallaxComponent.Speed = -parallaxSpeed;
-                } else
-                {
-                    parallaxComponent.Speed = parallaxSpeed;
-                }
+                SwitchAnimation("idle");
             }
+            playMoveSound = playMoveSound && moveDir.x != 0; //Ensure sount plays when we want and we're moving
+
+            Move(newVelocity, playMoveSound);
         }
+
+        if (rigidBodyComponent.position.y < BOTTOM_OF_WORLD)    //Always check this
+        {
+            GameOver();
+        }
+
+        Time += 1;
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Colliding with: " + collision.gameObject.name);
@@ -299,6 +232,14 @@ public class PlayerController : MonoBehaviour
             if (isCharging)
             {
                 collision.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+                // TODO: Need to be able to set the whole wall to dynamic. I've tried grouping them into one object and doing the above for all children, but no luck.
+/*                var children = collision.gameObject.GetComponentsInChildren<Rigidbody2D>();
+                foreach(Rigidbody2D child in children)
+                {
+                    child.bodyType = RigidbodyType2D.Dynamic;
+                }
+*/
 
             }
 
@@ -326,7 +267,7 @@ public class PlayerController : MonoBehaviour
         } else if (other.tag == "Spike")
         {
             Health = 0;
-            animator.SetTrigger("hurt");
+            SwitchAnimation("hurt");
             SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
             blood.Play();
             Die();
@@ -363,29 +304,309 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.checkPoint = other.gameObject.transform.position;
         }
     }
+
+    private void Move(Vector2 dir, bool playWalkSound)
+    {
+        //play move sound
+        if (playWalkSound)
+        {
+            SoundManager.instance.PlayWalkSound(moveSound1);
+            dust.Play();
+        } 
+        else if (rigidBodyComponent.velocity.x == dir.x)
+        {
+            SoundManager.instance.StopWalkSound();
+            dust.Stop();
+        }
+
+        rigidBodyComponent.velocity = dir;
+        UpdateCameraPosition();
+    }
+
+    private void CheckInput()
+    {
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Charge();
+        }
+        moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
+                                || (moveDir.x > 0);
+    }
+
+    IEnumerator  CheckGround()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        while (true)
+        {
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+            if (rigidBodyComponent.velocity.y <= 0.0f)
+            {
+                isJumping = false;
+            }
+
+            if (isGrounded && !isJumping && slopeDownAngle <= maxSlopeAngle)
+            {
+                canJump = true;
+            }
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        // change animation?
+        SwitchAnimation("idle");
+        yield return null;
+    }
+    private void SlopeCheck()
+    {
+        Vector2 checkPos = transform.position - (Vector3)(new Vector2(0.0f, capsuleColliderSize.y / 2));
+
+        SlopeCheckHorizontal(checkPos);
+        SlopeCheckVertical(checkPos);
+    }
+
+    private void SlopeCheckHorizontal(Vector2 checkPos)
+    {
+        RaycastHit2D slopeHitFront = Physics2D.Raycast(checkPos, transform.right, slopeCheckDistance, whatIsGround);
+        RaycastHit2D slopeHitBack = Physics2D.Raycast(checkPos, -transform.right, slopeCheckDistance, whatIsGround);
+
+        if (slopeHitFront)
+        {
+            isOnSlope = true;
+            slopeSideAngle = Vector2.Angle(slopeHitFront.normal, Vector2.up);
+        }
+        else if (slopeHitBack)
+        {
+            isOnSlope = true;
+            slopeSideAngle = Vector2.Angle(slopeHitBack.normal, Vector2.up);
+        }
+        else
+        {
+            slopeSideAngle = 0.0f;
+            isOnSlope = false;
+        }
+
+    }
+
+
+    private void SlopeCheckVertical(Vector2 checkPos)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(checkPos, Vector2.down, slopeCheckDistance, whatIsGround);
+
+        if (hit)
+        {
+            slopeNormalPerp = Vector2.Perpendicular(hit.normal).normalized;
+            slopeDownAngle = Vector2.Angle(hit.normal, Vector2.up);
+            if (slopeDownAngle != lastSlopeAngle)
+            {
+                isOnSlope = true;
+            }
+            lastSlopeAngle = slopeDownAngle;
+
+            Debug.DrawRay(hit.point, slopeNormalPerp, Color.blue);
+            Debug.DrawRay(hit.point, hit.normal, Color.green);
+        }
+        if (slopeDownAngle > maxSlopeAngle || slopeSideAngle > maxSlopeAngle)
+        {
+            canWalkOnSlope = false;
+        }
+        else
+        {
+            canWalkOnSlope = true;
+        }
+        if (isOnSlope && canWalkOnSlope && moveDir.x == 0.0f)
+        {
+            rigidBodyComponent.sharedMaterial = fullFriction;
+        }
+        else
+        {
+            rigidBodyComponent.sharedMaterial = noFriction;
+        }
+    }
+    private void Jump()
+    {
+        if (canJump)
+        {
+            Debug.Log("isJumping = true");
+            isJumping = true;
+            isGrounded = false;
+            canJump = false;
+            SwitchAnimation("jump");
+            SoundManager.instance.PlaySingleSoundEffect(playerJumpSound);
+
+            newForce.Set(0.0f, jumpForce);
+            rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
+            Debug.Log("Jumping. New Velocity after force is applied: " + rigidBodyComponent.velocity);
+            UpdateCameraPosition();
+        }
+    }
+
+    private void Charge()
+    {
+        if (canCharge)
+        {
+            Debug.Log("Charging");
+            canCharge = false;
+            isCharging = true;
+
+            newVelocity.Set(0.0f, 0.0f);
+            rigidBodyComponent.velocity = newVelocity;
+            oldGravityScale = rigidBodyComponent.gravityScale;
+            oldMass = rigidBodyComponent.mass;
+            rigidBodyComponent.gravityScale = 0;
+            rigidBodyComponent.mass = chargingMass;
+            if (PlayerFacingRight)
+            {
+                rigidBodyComponent.AddRelativeForce(Vector2.right * chargeForce * playerSpeed);
+            } else
+            {
+                rigidBodyComponent.AddRelativeForce(-Vector2.right * chargeForce * playerSpeed);
+            }
+
+            SoundManager.instance.PlaySingleSoundEffect(playerChargeSound);
+            SwitchAnimation("charge");
+            Invoke("RemoveChargeBoost", chargeBoostDuration);
+            Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
+            UpdateCameraPosition();
+        }
+    }
+
     private void ApplySpeedBoost()
     {
-        maxSpeed *= speedBoostFactor;
+        playerSpeed *= speedBoostFactor;
         Invoke("RemoveSpeedBoost", speedBoostDuration);
     }
     private void RemoveSpeedBoost()
     {
-        maxSpeed /= speedBoostFactor;
+        playerSpeed /= speedBoostFactor;
     }
+
+    private void RemoveChargeBoost()
+    {
+        isCharging = false;
+        rigidBodyComponent.gravityScale = oldGravityScale;
+        rigidBodyComponent.mass = oldMass;
+    }
+
+    private void RemoveChargeBoostCooldown()
+    {
+        canCharge = true;
+    }
+
+    private void UpdateParallax()
+    {
+        if (parallaxComponent != null)
+        {
+            if(animatorComponent.GetBool("idle"))
+            {
+                parallaxComponent.Speed = 0.0f;
+            } else
+            {
+                if (PlayerFacingRight)
+                {
+                    parallaxComponent.Speed = -parallaxSpeed;
+                } else
+                {
+                    parallaxComponent.Speed = parallaxSpeed;
+                }
+            }
+        }
+    }
+
+    private void UpdateCameraPosition()
+    { 
+        Vector2 pos = rigidBodyComponent.position;
+        Vector3 newCameraPos = new Vector3(pos.x, pos.y + 1.5f, -10.0f);
+        playerCamera.transform.position = newCameraPos;
+        UpdateParallax();
+    }
+
+    // Very hacky way to make sure animations are mutually exclusive
+    private void SwitchAnimation(string param)
+    {
+        
+        if (!isGrounded && ((param == "jump") || (param == "charge")))
+        {
+            if (isCharging) { param = "charge"; }
+            UnsetAllAnimations();
+            animatorComponent.SetBool(param, true);
+            return;
+        }
+
+        if (!isGrounded && (param != "jump"))
+        {
+            return;
+        }
+        if (isCharging && (param != "charge"))
+        {
+            return;
+        }
+        if (isDead && param != "die")
+        {
+            return;
+        }
+        if (isTakingDamage) // hack to get hurt to work
+        {
+            return;
+        }
+
+        UnsetAllAnimations();
+        animatorComponent.SetBool(param, true);
+    }
+
+    private void UnsetAllAnimations()
+    {
+        foreach (string s in animationParameters)
+        {
+            animatorComponent.SetBool(s, false);
+        }
+
+    }
+
+    private void TakeDamage()
+    {
+        SwitchAnimation("hurt");
+        isTakingDamage = true;
+        SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
+        blood.Play();
+        Health -= 1;
+        if (Health <= 0)
+        {
+            Invoke("Die", 1f);
+        }
+        if (!isGrounded)
+        {
+            isTakingDamage = false;
+        }
+    }
+
+    // Hack to ensure hurt animation completes. Called from animation event
+    private void DamageAnimationDone()
+    {
+        isTakingDamage = false;
+        animatorComponent.SetBool("hurt", false);
+        animatorComponent.SetBool("idle", true);
+    }
+
     private void Die()
     {
         canMove = false;
-        animator.SetTrigger("die");
+        isDead = true;
+        SwitchAnimation("die");
         Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
     }
+
     private void GameOver()
     {
         GameManager.instance.GameOver();
     }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position + colliderOffset, transform.position + colliderOffset + Vector3.down * groundLength);
-        Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLength);
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
