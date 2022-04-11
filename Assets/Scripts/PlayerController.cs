@@ -56,6 +56,10 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private float parallaxSpeed;
     [SerializeField] private float chargingMass;
 
+    public float maxPlayerSpeed = 15f;
+    public float maxJumpSpeed = 15f;
+    public float maxFallingSpeed = 15f;
+
     // Slope/collision resolution parameters
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private float slopeCheckDistance;
@@ -230,15 +234,7 @@ public class PlayerController :  MonoBehaviour
         {
             if (isCharging)
             {
-                collision.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-
-                // TODO: Need to be able to set the whole wall to dynamic. I've tried grouping them into one object and doing the above for all children, but no luck.
-/*                var children = collision.gameObject.GetComponentsInChildren<Rigidbody2D>();
-                foreach(Rigidbody2D child in children)
-                {
-                    child.bodyType = RigidbodyType2D.Dynamic;
-                }
-*/
+                collision.gameObject.GetComponent<Rigidbody2D>().drag = 0;
 
             }
 
@@ -318,7 +314,12 @@ public class PlayerController :  MonoBehaviour
             dust.Stop();
         }
 
-        rigidBodyComponent.velocity = dir;
+
+        float x = Mathf.Clamp(dir.x, -maxPlayerSpeed, maxPlayerSpeed);
+        float y = Mathf.Clamp(dir.y, -maxFallingSpeed, maxJumpSpeed);
+
+
+        rigidBodyComponent.velocity = new Vector2(x, y);
         UpdateCameraPosition();
     }
 
