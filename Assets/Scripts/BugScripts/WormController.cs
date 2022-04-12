@@ -29,6 +29,10 @@ public class WormController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "BreakBlock")
+        {
+            Kill();
+        }
         if (collision.gameObject.tag == "Player")
         {
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)

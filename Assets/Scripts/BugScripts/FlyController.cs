@@ -38,7 +38,11 @@ public class FlyController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Call Coroutine to dissolve platform
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "BreakBlock")
+        {
+            Kill();
+        }
+            if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Fly has touched player");
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
