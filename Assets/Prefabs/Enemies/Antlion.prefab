@@ -4835,7 +4835,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -303779021
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -4935,7 +4935,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2108986501
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 6576298833289000266, guid: 441282e15bf83854a9eb3cc221a78fa5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4958,7 +4958,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.02, y: -0.1}
@@ -4973,7 +4973,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.65}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.1
 --- !u!95 &2764723522050089777
 Animator:
   serializedVersion: 3

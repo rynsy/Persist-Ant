@@ -35,30 +35,29 @@ public class FlyController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         // Call Coroutine to dissolve platform
-        if (other.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Fly has touched player");
-            if (other.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
                 animatorComponent.SetTrigger("FlyDead");
                 blood.Play();
             }
-            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
                 Kill();
             }
-        } else if (other.gameObject.tag == "Combine")
+        } else if (collision.gameObject.tag == "Combine")
         {
             Kill();
         }
+        
     }
-
     public void Kill()
     {
         rigidbodyComponent.simulated = false;
