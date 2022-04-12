@@ -481,18 +481,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 770072368}
     m_Modifications:
-    - target: {fileID: 6118063342527559147, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: flySpeed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6118063342527559152, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6118063342527559152, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: m_EdgeRadius
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 6118063342527559153, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
       propertyPath: m_Name
       value: Fly (9)
@@ -540,18 +528,6 @@ PrefabInstance:
     - target: {fileID: 6118063342527559156, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6890403490717920320, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: m_Mass
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6890403490717920320, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: m_LinearDrag
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 6890403490717920320, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
-      propertyPath: m_Constraints
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 112f7da4a6141304caea69f1869840d3, type: 3}
@@ -1229,10 +1205,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 770072368}
     m_Modifications:
-    - target: {fileID: 1408165279728846515, guid: 8f6d595a0ab33694787eefa29045d0a1, type: 3}
-      propertyPath: m_EdgeRadius
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 1408165279728846517, guid: 8f6d595a0ab33694787eefa29045d0a1, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -2087,14 +2059,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 770072368}
     m_Modifications:
-    - target: {fileID: 1408165279728846515, guid: 8f6d595a0ab33694787eefa29045d0a1, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1408165279728846515, guid: 8f6d595a0ab33694787eefa29045d0a1, type: 3}
-      propertyPath: m_EdgeRadius
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 1408165279728846517, guid: 8f6d595a0ab33694787eefa29045d0a1, type: 3}
       propertyPath: m_RootOrder
       value: 13
