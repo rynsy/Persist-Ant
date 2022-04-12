@@ -15,7 +15,7 @@ public class FlyController : MonoBehaviour
     public float motionTriggerRadius;
     public float flySpeed = 0.5f;
     public float bobFactor = 1f;
-
+    // ok
     // Start is called before the first frame update
     void Start()
     {
