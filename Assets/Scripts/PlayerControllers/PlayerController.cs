@@ -240,8 +240,10 @@ public class PlayerController :  MonoBehaviour
             }
         } else if (collision.gameObject.tag == "Enemy")
         {
-            if (!isCharging)
+            ContactPoint2D contact = collision.GetContact(0);
+            if (!isCharging && contact.normal != Vector2.up)
             {
+                Move(new Vector2(contact.normal.x * 15f, 20f), false);
                 TakeDamage();
             }
         } else if (collision.gameObject.tag == "Spike")
@@ -582,7 +584,7 @@ public class PlayerController :  MonoBehaviour
         Health -= 1;
         if (Health <= 0)
         {
-            Invoke("Die", 1f);
+            Invoke("Die", 0.5f);
         }
         if (!isGrounded)
         {
