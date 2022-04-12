@@ -25,6 +25,10 @@ public class SnailController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "BreakBlock")
+        {
+            Kill();
+        }
         // Call Coroutine to dissolve platform
         if (collision.gameObject.tag == "Player")
         {
