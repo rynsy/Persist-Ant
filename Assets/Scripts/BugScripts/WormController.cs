@@ -27,33 +27,27 @@ public class WormController : MonoBehaviour
         }
     }
 
-
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Call Coroutine to dissolve platform
-        if (other.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
-            if (other.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
             {
                 SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
                 animatorComponent.SetTrigger("die");
                 blood.Play();
             }
-            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player.isCharging)
             {
                 Kill();
             }
         } 
-        if (other.gameObject.tag == "Combine")
+        if (collision.gameObject.tag == "Combine")
         {
             Debug.Log("combine worm");
             Kill();
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
         if (collision.gameObject.tag == "Combine")
         {
             Debug.Log("combine worm");

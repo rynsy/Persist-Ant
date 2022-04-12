@@ -11,28 +11,26 @@ public class PlayerController :  MonoBehaviour
     private const int MAX_HEALTH = 3;
 
     // Our mortal enemy
+    [Header("Level Parameters")]
     [SerializeField] private CombineController combine;
     [SerializeField] private GameObject combineSpawn;
     [SerializeField] private GameObject checkPoint;
     [SerializeField] private GameObject startingPosition;
+    [SerializeField] private HealthController healthIndicator;
 
-    // Components
-    public Camera playerCamera;
-    public Camera cameraPrefab;
-    public ParticleSystem dust;
-    public ParticleSystem blood;
-    public FreeParallax parallaxComponent;
-    private Rigidbody2D rigidBodyComponent;
-    private Animator animatorComponent;
-    private CapsuleCollider2D capsuleCollider;
+    [Header("Components")]
+    [SerializeField] public Camera playerCamera;
+    [SerializeField] public ParticleSystem dust;
+    [SerializeField] public ParticleSystem blood;
+    [SerializeField] public FreeParallax parallaxComponent;
+    [SerializeField] private Rigidbody2D rigidBodyComponent;
+    [SerializeField] private Animator animatorComponent;
+    [SerializeField] private CapsuleCollider2D capsuleCollider;
     
     // All the states
     string[] animationParameters = {"idle", "run", "hurt", "jump", "charge", "die" };
 
-    // HUD
-    [SerializeField] private HealthController healthIndicator;
-
-    // Sound
+    [Header("Sounds")]
     public AudioClip moveSound1;
     public AudioClip playerHurtSound;
     public AudioClip genericItemSound;
@@ -45,6 +43,7 @@ public class PlayerController :  MonoBehaviour
     private Vector2 moveDir; 
 
     // Player Parameters
+    [Header("Player Parameters")]
     [SerializeField] private int playerHealth = 3;
     [SerializeField] private int playerSpeed = 5;
     [SerializeField] private int speedBoostFactor = 2;
@@ -64,6 +63,7 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private PhysicsMaterial2D noFriction;
     [SerializeField] private PhysicsMaterial2D fullFriction;
+    public GameObject characterHolder;
 
     private float slopeDownAngle;
     private float slopeSideAngle;
@@ -85,12 +85,12 @@ public class PlayerController :  MonoBehaviour
     public bool canMove = true;
 
     // Exposed for debugging/toggling animations
-    public bool isTakingDamage;        // Hack to make sure hurt animation plays
-    public bool isOnSlope;
-    public bool isGrounded;
-    public bool isDead;
-    public bool isJumping;
-    public bool isCharging;
+    public bool isTakingDamage = false;        // Hack to make sure hurt animation plays
+    public bool isOnSlope = false;
+    public bool isGrounded = true;
+    public bool isDead = false;
+    public bool isJumping = false;
+    public bool isCharging = false;
 
     // Time, if we want to track how long it takes to beat a level
     private int _time = 0;
@@ -99,7 +99,7 @@ public class PlayerController :  MonoBehaviour
     private float oldCombineSpeed;
 
     // Variables that need fancy getters/setters to couple variables to actions
-    public int Time
+    public int PlayTime
     {
         get
         {
@@ -132,14 +132,13 @@ public class PlayerController :  MonoBehaviour
         set
         {
             _facingRight = value;
-            animatorComponent.SetBool("facingRight", _facingRight);
+            transform.rotation = Quaternion.Euler(0, _facingRight ? 0 : 180, 0);
         }
     }
 
     void Start()
     {
         // Grab components
-        animatorComponent = GetComponent<Animator>();
         rigidBodyComponent = GetComponent<Rigidbody2D>();
         parallaxComponent = GameObject.Find("Background").GetComponentInChildren<FreeParallax>();
         
@@ -161,7 +160,7 @@ public class PlayerController :  MonoBehaviour
         // Set state for game start
         PlayerFacingRight = true;
         moveDir = Vector2.zero;
-        animatorComponent.SetBool("idle", true);
+        animatorComponent.SetBool("run", false);
     }
 
     void Restart()
@@ -177,7 +176,6 @@ public class PlayerController :  MonoBehaviour
 
     private void FixedUpdate()
     {
-//        CheckGround();
         StartCoroutine("CheckGround");
         SlopeCheck();
         ApplyMovement();
@@ -210,17 +208,16 @@ public class PlayerController :  MonoBehaviour
             {
                 SwitchAnimation("idle");
             }
-            playMoveSound = playMoveSound && moveDir.x != 0; //Ensure sount plays when we want and we're moving
+            playMoveSound = playMoveSound && moveDir.x != 0; //Ensure sound plays when we want and we're moving
 
             Move(newVelocity, playMoveSound);
+            PlayTime += 1; // Don't want to increase this after death
         }
 
         if (rigidBodyComponent.position.y < BOTTOM_OF_WORLD)    //Always check this
         {
             GameOver();
         }
-
-        Time += 1;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -231,16 +228,7 @@ public class PlayerController :  MonoBehaviour
         {
             if (isCharging)
             {
-                collision.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-
-                // TODO: Need to be able to set the whole wall to dynamic. I've tried grouping them into one object and doing the above for all children, but no luck.
-/*                var children = collision.gameObject.GetComponentsInChildren<Rigidbody2D>();
-                foreach(Rigidbody2D child in children)
-                {
-                    child.bodyType = RigidbodyType2D.Dynamic;
-                }
-*/
-
+                collision.gameObject.GetComponent<Rigidbody2D>().drag = 0;
             }
 
         } else if (collision.gameObject.tag == "BouncePad")
@@ -250,7 +238,19 @@ public class PlayerController :  MonoBehaviour
             {
                 SoundManager.instance.PlaySingleSoundEffect(playerBounceSound);
             }
-        }
+        } else if (collision.gameObject.tag == "Enemy")
+        {
+            if (!isCharging)
+            {
+                TakeDamage();
+            }
+        } else if (collision.gameObject.tag == "Spike")
+        {
+            Health = 0;
+            SwitchAnimation("hurt");
+            SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
+            Die();
+        } 
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -258,21 +258,7 @@ public class PlayerController :  MonoBehaviour
         Debug.Log("Triggered by: " + other.name);
 
         //Check if the tag of the trigger collided with is Exit.
-        if (other.tag == "Enemy")
-        {
-            if (!isCharging)
-            {
-                TakeDamage();
-            }
-        } else if (other.tag == "Spike")
-        {
-            Health = 0;
-            SwitchAnimation("hurt");
-            SoundManager.instance.PlaySingleSoundEffect(playerHurtSound);
-            blood.Play();
-            Die();
-//            TakeDamage();
-        } else if (other.tag == "Item")
+        if (other.tag == "Item")
         {
             SoundManager.instance.PlaySingleSoundEffect(genericItemSound);
             Destroy(other.gameObject);
@@ -334,8 +320,11 @@ public class PlayerController :  MonoBehaviour
             Charge();
         }
         moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
-                                || (moveDir.x > 0);
+        if (canMove)
+        {
+            PlayerFacingRight = (moveDir.x == 0 && PlayerFacingRight)
+                                    || (moveDir.x > 0);
+        }
     }
 
     IEnumerator  CheckGround()
@@ -344,7 +333,13 @@ public class PlayerController :  MonoBehaviour
 
         while (true)
         {
+            bool wasOnGround = isGrounded;
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+            animatorComponent.SetBool("onGround", isGrounded);
+            if (!wasOnGround && isGrounded)
+            {
+                StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f)); // Landing squish
+            }
             if (rigidBodyComponent.velocity.y <= 0.0f)
             {
                 isJumping = false;
@@ -356,9 +351,6 @@ public class PlayerController :  MonoBehaviour
             }
             yield return new WaitForSeconds(0.05f);
         }
-
-        // change animation?
-        SwitchAnimation("idle");
         yield return null;
     }
     private void SlopeCheck()
@@ -442,6 +434,7 @@ public class PlayerController :  MonoBehaviour
             rigidBodyComponent.AddForce(newForce, ForceMode2D.Impulse);
             Debug.Log("Jumping. New Velocity after force is applied: " + rigidBodyComponent.velocity);
             UpdateCameraPosition();
+            StartCoroutine(JumpSqueeze(0.7f, 1.2f, 0.1f)); //TODO: Tweak
         }
     }
 
@@ -472,6 +465,7 @@ public class PlayerController :  MonoBehaviour
             Invoke("RemoveChargeBoost", chargeBoostDuration);
             Invoke("RemoveChargeBoostCooldown", chargeBoostCooldown);
             UpdateCameraPosition();
+            StartCoroutine(JumpSqueeze(1.0f, 0.8f, 0.5f));
         }
     }
 
@@ -528,41 +522,53 @@ public class PlayerController :  MonoBehaviour
     // Very hacky way to make sure animations are mutually exclusive
     private void SwitchAnimation(string param)
     {
-        
-        if (!isGrounded && ((param == "jump") || (param == "charge")))
+        switch(param)
         {
-            if (isCharging) { param = "charge"; }
-            UnsetAllAnimations();
-            animatorComponent.SetBool(param, true);
-            return;
+            case "jump":
+                animatorComponent.SetTrigger("jump");
+                break;
+            case "charge":
+                animatorComponent.SetTrigger("charge");
+                break;
+            case "hurt":
+                animatorComponent.SetTrigger("hurt");
+                break;
+            case "idle":
+                animatorComponent.SetBool("run", false);
+                break;
+            case "run":
+                animatorComponent.SetBool("run", true);
+                break;
+            case "die":
+                animatorComponent.SetBool("dead", true);
+                break;
+            default:
+                animatorComponent.SetBool("run", false);
+                break;
         }
-
-        if (!isGrounded && (param != "jump"))
-        {
-            return;
-        }
-        if (isCharging && (param != "charge"))
-        {
-            return;
-        }
-        if (isDead && param != "die")
-        {
-            return;
-        }
-        if (isTakingDamage) // hack to get hurt to work
-        {
-            return;
-        }
-
-        UnsetAllAnimations();
-        animatorComponent.SetBool(param, true);
+    }
+    void Flip()
+    {
+        PlayerFacingRight = !PlayerFacingRight;
     }
 
-    private void UnsetAllAnimations()
+    IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds)
     {
-        foreach (string s in animationParameters)
+        Vector3 originalSize = Vector3.one;
+        Vector3 newSize = new Vector3(xSqueeze, ySqueeze, originalSize.z);
+        float t = 0f;
+        while (t <= 1.0)
         {
-            animatorComponent.SetBool(s, false);
+            t += Time.deltaTime / seconds;
+            characterHolder.transform.localScale = Vector3.Lerp(originalSize, newSize, t);
+            yield return null;
+        }
+        t = 0f;
+        while (t <= 1.0)
+        {
+            t += Time.deltaTime / seconds;
+            characterHolder.transform.localScale = Vector3.Lerp(newSize, originalSize, t);
+            yield return null;
         }
 
     }
@@ -596,6 +602,9 @@ public class PlayerController :  MonoBehaviour
     {
         canMove = false;
         isDead = true;
+        blood.Play();
+        dust.Stop();
+        rigidBodyComponent.bodyType = RigidbodyType2D.Static;
         SwitchAnimation("die");
         Invoke("GameOver", 2f);                 // TODO: tweak this to allow the death animation to play
     }
