@@ -79,6 +79,13 @@ public class GameManager : MonoBehaviour
    
     public void Restart()
     {
+        /* If we want respawns to start the music after the game loop intro use the code below
+        doingSetup = true;
+        Debug.Log("Setting up the scene");
+        SoundManager.instance.PlayMainGameLoop();
+        SceneManager.LoadScene("Level1");
+        doingSetup = false;
+        */
         InitGame();
     }
 

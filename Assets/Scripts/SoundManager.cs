@@ -80,6 +80,12 @@ public class SoundManager : MonoBehaviour
             yield return null;
         }
         musicSource.Stop();
+        PlayMainGameLoop();
+    }
+
+    public void PlayMainGameLoop()
+    {
+        StopMusic();
         musicSource.loop = true;
         musicSource.clip = stressMusicMainLoop;
         musicSource.Play();
