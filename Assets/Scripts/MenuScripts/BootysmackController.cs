@@ -1,25 +1,3 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.SceneManagement;
-
-//public class bootysmackcontroller : monobehaviour
-//{
-//    // start is called before the first frame update
-//    void start()
-//    {
-//        //start the coroutine we define below named examplecoroutine.
-//        startcoroutine(gotostartmenu());
-//    }
-
-//    ienumerator gotostartmenu()
-//    {
-//        soundmanager.instance.playbooty();
-//        yield return new waitforseconds(4);
-//        scenemanager.loadscene(scenename: "startmenu");
-//    }
-//}
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
