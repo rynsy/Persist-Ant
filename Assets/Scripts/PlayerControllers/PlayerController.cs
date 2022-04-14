@@ -17,6 +17,7 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private GameObject checkPoint;
     [SerializeField] private GameObject startingPosition;
     [SerializeField] private HealthController healthIndicator;
+    [SerializeField] private float parallaxSpeed;
 
     [Header("Components")]
     [SerializeField] public Camera playerCamera;
@@ -43,19 +44,29 @@ public class PlayerController :  MonoBehaviour
     private Vector2 moveDir; 
 
     // Player Parameters
-    [Header("Player Parameters")]
+    [Header("Player  Parameters")]
+    public GameObject characterHolder;
+    [Header("Player Movement Parameters")]
     [SerializeField] private int playerHealth = 3;
-    [SerializeField] private int playerSpeed = 5;
-    [SerializeField] private int speedBoostFactor = 2;
-    [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private float chargeForce = 1.5f;
+    [SerializeField] private float playerSpeed = 5;
+    [SerializeField] private float playerMaxSpeed = 50;
+
+    [SerializeField] private float speedBoostFactor = 2;
     [SerializeField] private float speedBoostDuration = 10f;
+
+    [Header("Player Jumping Parameters")]
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float playerMaxJumpSpeed = 50;
+
+
+    [Header("Player Charging Parameters")]
+    [SerializeField] private float chargeForce = 1.5f;
+    [SerializeField] private float chargingMass;
     [SerializeField] private float chargeBoostDuration = 0.5f;
     [SerializeField] private float chargeBoostCooldown = 5f;
-    [SerializeField] private float parallaxSpeed;
-    [SerializeField] private float chargingMass;
 
-    // Slope/collision resolution parameters
+
+    [Header("Slope/Collision Parameters")]
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private float slopeCheckDistance;
     [SerializeField] private float maxSlopeAngle;
@@ -63,11 +74,11 @@ public class PlayerController :  MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private PhysicsMaterial2D noFriction;
     [SerializeField] private PhysicsMaterial2D fullFriction;
-    public GameObject characterHolder;
 
     private float slopeDownAngle;
     private float slopeSideAngle;
     private float lastSlopeAngle;
+    
     private float oldGravityScale;
     private float oldMass;
 
@@ -77,6 +88,7 @@ public class PlayerController :  MonoBehaviour
     private Vector2 slopeNormalPerp; 
 
     // Flags
+    [Header("Booleans")]
     private bool _facingRight;
     private bool canWalkOnSlope;
 
@@ -307,7 +319,10 @@ public class PlayerController :  MonoBehaviour
             dust.Stop();
         }
 
-        rigidBodyComponent.velocity = dir;
+        var x = Mathf.Clamp(dir.x, -playerMaxSpeed, playerMaxSpeed);
+        var y = Mathf.Clamp(dir.y, -playerMaxJumpSpeed, playerMaxJumpSpeed);
+        rigidBodyComponent.velocity = new Vector2(x, y);
+
         UpdateCameraPosition();
     }
 

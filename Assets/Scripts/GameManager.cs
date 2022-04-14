@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        // May not need the above. If we want the GameManager to handle game state instead of loading indiv. scenes we'll do it here.
     }
    
     public void Restart()

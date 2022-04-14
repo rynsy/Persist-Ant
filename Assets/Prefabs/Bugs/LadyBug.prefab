@@ -4835,7 +4835,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -303779021
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0
@@ -4874,8 +4874,8 @@ GameObject:
   - component: {fileID: 5742041221312573136}
   - component: {fileID: 5742041221312573151}
   - component: {fileID: 3586464038218806973}
-  - component: {fileID: 487278426}
-  - component: {fileID: 487278429}
+  - component: {fileID: 518094934477531549}
+  - component: {fileID: 3216379706343908973}
   m_Layer: 8
   m_Name: LadyBug
   m_TagString: BouncePad
@@ -4936,7 +4936,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -967454167
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -7705698871683855914, guid: f6b84a962e650fd48810689374e701fe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4985,7 +4985,7 @@ MonoBehaviour:
   ladybugDeathSound: {fileID: 8300000, guid: 6a6c995d16c49a247a1cabb82c79a99b, type: 3}
   blood: {fileID: 4262134}
   bugSpeed: 2
---- !u!70 &487278426
+--- !u!70 &518094934477531549
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4998,10 +4998,10 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.05, y: 0.1}
-  m_Size: {x: 0.5, y: 0.25}
-  m_Direction: 1
---- !u!61 &487278429
+  m_Offset: {x: 0, y: -0.1}
+  m_Size: {x: 0.9, y: 0.5}
+  m_Direction: 0
+--- !u!61 &3216379706343908973
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5010,11 +5010,11 @@ BoxCollider2D:
   m_GameObject: {fileID: 5742041221312573138}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 42b0aba037f48d1448a27646ff27ff3d, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.04637754, y: -0.18612504}
+  m_Offset: {x: 0, y: -0.2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5025,5 +5025,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9473336, y: 0.29188776}
+  m_Size: {x: 1, y: 0.25}
   m_EdgeRadius: 0

@@ -73,6 +73,7 @@ MonoBehaviour:
   checkPoint: {fileID: 0}
   startingPosition: {fileID: 0}
   healthIndicator: {fileID: 0}
+  parallaxSpeed: 1
   playerCamera: {fileID: 0}
   dust: {fileID: 1729242685}
   blood: {fileID: 2107182132}
@@ -87,16 +88,18 @@ MonoBehaviour:
   playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
   playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
+  characterHolder: {fileID: 8165560375877382133}
   playerHealth: 3
   playerSpeed: 8
+  playerMaxSpeed: 50
   speedBoostFactor: 2
-  jumpForce: 22
-  chargeForce: 30
   speedBoostDuration: 11
+  jumpForce: 22
+  playerMaxJumpSpeed: 50
+  chargeForce: 30
+  chargingMass: 2000
   chargeBoostDuration: 0.4
   chargeBoostCooldown: 0.5
-  parallaxSpeed: 1
-  chargingMass: 2000
   groundCheckRadius: 0.2
   slopeCheckDistance: 0.6
   maxSlopeAngle: 50
@@ -106,7 +109,6 @@ MonoBehaviour:
     m_Bits: 384
   noFriction: {fileID: 6200000, guid: 2269658afae0d2143a598f92a11a763c, type: 2}
   fullFriction: {fileID: 6200000, guid: 9c472d53f880a54429754ff0450a8874, type: 2}
-  characterHolder: {fileID: 8165560375877382133}
   canJump: 1
   canCharge: 1
   canMove: 1
