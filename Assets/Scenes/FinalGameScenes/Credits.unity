@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 894631664}
   - component: {fileID: 894631665}
   m_Layer: 0
-  m_Name: GameOverScreen
+  m_Name: CreditsScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 1675415320}
   - component: {fileID: 1675415319}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
