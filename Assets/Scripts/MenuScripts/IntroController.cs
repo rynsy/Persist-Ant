@@ -14,6 +14,16 @@ public class IntroController : MonoBehaviour
         SoundManager.instance.PlayChillMusic();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            Coroutine lastRoutine = null;
+            lastRoutine = StartCoroutine(DisplayImages());
+            StopCoroutine(lastRoutine);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +32,7 @@ public class IntroController : MonoBehaviour
 
     IEnumerator DisplayImages()
     {
-        while (imageCounter < introImages.Length)
+        while ((imageCounter < introImages.Length))
         {
             introImages[imageCounter].SetActive(true);
             imageCounter += 1;
@@ -32,7 +42,6 @@ public class IntroController : MonoBehaviour
             }
             yield return new WaitForSeconds(transitionDelay);
         }
-           //ield return new WaitForSeconds(1.8f);
         GameManager.instance.StartLevel1();         
     }
 }
