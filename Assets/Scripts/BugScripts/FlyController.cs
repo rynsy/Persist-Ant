@@ -42,7 +42,7 @@ public class FlyController : MonoBehaviour
         {
             Kill();
         }
-            if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Fly has touched player");
             if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
@@ -62,6 +62,26 @@ public class FlyController : MonoBehaviour
         }
         
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Fly has touched player");
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                SoundManager.instance.PlaySingleSoundEffect(flyDeathSound);
+                animatorComponent.SetTrigger("FlyDead");
+                blood.Play();
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                Kill();
+            }
+        }
+    }
+
     public void Kill()
     {
         rigidbodyComponent.simulated = false;

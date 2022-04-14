@@ -6,37 +6,59 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     public AudioClip buttonPressSound;
+    public bool buttonClicked;
+
 
     private void Awake()
     {
         SoundManager.instance.PlayMenuMusic();
+        buttonClicked = false;
     }
 
     public void PlayButtonAction()
     {
-        Debug.Log("PLAY");
-        SoundManager.instance.StopMusic();
-        SoundManager.instance.PlaySingleSoundEffect(buttonPressSound);
-        StartCoroutine(Load("Intro", buttonPressSound.length));
+        if (!buttonClicked)
+        {
+            buttonClicked = true;
+            Debug.Log("PLAY");
+            SoundManager.instance.StopMusic();
+            SoundManager.instance.PlaySingleSoundEffect(buttonPressSound);
+            StartCoroutine(Load("Intro", buttonPressSound.length));
+        }
     }
     public void LevelSelectButtonAction()
     {
-        Debug.Log("LEVEL SELECT");
-        SoundManager.instance.StopMusic();
-        SoundManager.instance.PlaySingleSoundEffect(buttonPressSound);
+        if (!buttonClicked)
+        {
+            buttonClicked = true;
+            Debug.Log("LEVEL SELECT");
+            SoundManager.instance.StopMusic();
+            SceneManager.LoadScene("LevelSelect");
+        }
     }
     public void CreditsButtonAction()
     {
-        Debug.Log("CREDITS");
-        SoundManager.instance.StopMusic();
-        SoundManager.instance.PlaySingleSoundEffect(buttonPressSound);
+        if (!buttonClicked)
+        {
+            buttonClicked = true;
+            Debug.Log("CREDITS");
+            SoundManager.instance.StopMusic();
+            SoundManager.instance.Credits();
+            SceneManager.LoadScene("Credits");
+        }
     }
   
     IEnumerator Load(string scene, float delay)
     {
         yield return new WaitForSeconds(delay);
         Debug.Log("LOADED");
-        GameManager.instance.StartIntro();
+        if (scene == "Intro")
+        {
+            GameManager.instance.StartIntro();
+        } else
+        {
+            SceneManager.LoadScene(scene);
+        }
     }    
 
     public void Win()

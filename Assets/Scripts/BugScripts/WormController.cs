@@ -59,6 +59,23 @@ public class WormController : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                SoundManager.instance.PlaySingleSoundEffect(wormDeathSound);
+                animatorComponent.SetTrigger("die");
+                blood.Play();
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                Kill();
+            }
+        } 
+    }
 
     public void Kill()
     {

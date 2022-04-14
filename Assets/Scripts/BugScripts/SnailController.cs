@@ -51,6 +51,24 @@ public class SnailController : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            if (collision.gameObject.transform.position.y > gameObject.transform.position.y + 0.5f)
+            {
+                SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
+            }
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player.isCharging)
+            {
+                rigidbodyComponent.simulated = false;
+                SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
+                Kill();
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Combine")

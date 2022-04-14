@@ -65,16 +65,13 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Level1");
     }
     
-    //Hides black image used between levels
-    
-    //Update is called every frame.
     void Update()
     {
-        //doingSetup are not currently true.
         if(doingSetup)
         {
             return;
         }
+        // May not need the above. If we want the GameManager to handle game state instead of loading indiv. scenes we'll do it here.
     }
    
     public void Restart()
@@ -89,7 +86,6 @@ public class GameManager : MonoBehaviour
         InitGame();
     }
 
-    //GameOver is called when the player reaches 0 food points
     public void GameOver()
     {
         // Load GameOVerScene
