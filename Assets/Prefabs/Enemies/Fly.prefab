@@ -5008,7 +5008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blood: {fileID: 9093292047163504681}
   flyDeathSound: {fileID: 8300000, guid: 6a6c995d16c49a247a1cabb82c79a99b, type: 3}
-  motionTriggerRadius: 10
+  motionTriggerRadius: 16
   flySpeed: 28
   bobFactor: 0.01
 --- !u!50 &6890403490717920320
