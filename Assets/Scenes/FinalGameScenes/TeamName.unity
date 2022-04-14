@@ -410,7 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundManager: {fileID: 109316, guid: cabb72f3e4accb14f8d9c0b805e65690, type: 3}
   fadeOutUIImage: {fileID: 1709296052}
-  fadeSpeed: 3.5
+  fadeSpeed: 1
 --- !u!114 &1709296052
 MonoBehaviour:
   m_ObjectHideFlags: 0

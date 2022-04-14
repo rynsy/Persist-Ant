@@ -30,6 +30,7 @@ public class BootysmackController : MonoBehaviour
 	private IEnumerator Fade(FadeDirection fadeDirection)
 	{
 		SoundManager.instance.PlayBooty();
+		yield return new WaitForSeconds(3);
 		float alpha = (fadeDirection == FadeDirection.Out) ? 1 : 0;
 		float fadeEndValue = (fadeDirection == FadeDirection.Out) ? 0 : 1;
 		if (fadeDirection == FadeDirection.Out)
