@@ -36,7 +36,7 @@ public class SnailController : MonoBehaviour
             {
                 SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;
@@ -59,7 +59,7 @@ public class SnailController : MonoBehaviour
             {
                 SoundManager.instance.PlaySingleSoundEffect(snailDeathSound);
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 rigidbodyComponent.simulated = false;

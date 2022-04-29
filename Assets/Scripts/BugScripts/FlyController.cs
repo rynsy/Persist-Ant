@@ -51,7 +51,7 @@ public class FlyController : MonoBehaviour
                 animatorComponent.SetTrigger("FlyDead");
                 blood.Play();
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 Kill();
@@ -74,7 +74,7 @@ public class FlyController : MonoBehaviour
                 animatorComponent.SetTrigger("FlyDead");
                 blood.Play();
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 Kill();

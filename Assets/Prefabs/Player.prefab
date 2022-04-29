@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 446652}
   - component: {fileID: 5046652}
   - component: {fileID: 11446652}
+  - component: {fileID: 1797411515905679050}
+  - component: {fileID: 6681397003507841659}
+  - component: {fileID: 4654297752094642867}
   - component: {fileID: 1946762727}
   m_Layer: 6
   m_Name: Player
@@ -73,42 +76,14 @@ MonoBehaviour:
   checkPoint: {fileID: 0}
   startingPosition: {fileID: 0}
   healthIndicator: {fileID: 0}
-  parallaxSpeed: 1
-  playerCamera: {fileID: 0}
   dust: {fileID: 1729242685}
   blood: {fileID: 2107182132}
-  parallaxComponent: {fileID: 0}
   rigidBodyComponent: {fileID: 5046652}
-  animatorComponent: {fileID: 5847925373976690949}
-  capsuleCollider: {fileID: 1946762727}
-  moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
-  playerHurtSound: {fileID: 8300000, guid: 79d3cac87a980334bb27e642dcb419bb, type: 3}
-  genericItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
-  healthItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
-  playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
-  playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
-  playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
-  characterHolder: {fileID: 8165560375877382133}
-  playerHealth: 3
-  playerSpeed: 8
-  playerMaxSpeed: 50
-  speedBoostFactor: 2
-  speedBoostDuration: 11
-  jumpForce: 22
-  playerMaxJumpSpeed: 50
-  chargeForce: 30
-  chargingMass: 2000
-  chargeBoostDuration: 0.4
-  chargeBoostCooldown: 0.5
-  groundCheckRadius: 0.2
-  slopeCheckDistance: 0.6
-  maxSlopeAngle: 50
-  groundCheck: {fileID: 954299037}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 384
-  noFriction: {fileID: 6200000, guid: 2269658afae0d2143a598f92a11a763c, type: 2}
-  fullFriction: {fileID: 6200000, guid: 9c472d53f880a54429754ff0450a8874, type: 2}
+  inputManager: {fileID: 4654297752094642867}
+  playerLocomotion: {fileID: 6681397003507841659}
+  animationController: {fileID: 1797411515905679050}
+  facingRight: 0
+  canWalkOnSlope: 0
   canJump: 1
   canCharge: 1
   canMove: 1
@@ -118,6 +93,73 @@ MonoBehaviour:
   isDead: 0
   isJumping: 0
   isCharging: 0
+  playerHealth: 3
+--- !u!114 &1797411515905679050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34b347b43d070541acf0c749a2bce77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterHolder: {fileID: 8165560375877382133}
+  moveSound1: {fileID: 8300000, guid: 2c1f24f220420bb4f9b4eca00669bc55, type: 3}
+  genericItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
+  healthItemSound: {fileID: 8300000, guid: 8e9394e3b95ba714087bcdd7e2bdf554, type: 3}
+  playerHurtSound: {fileID: 8300000, guid: 79d3cac87a980334bb27e642dcb419bb, type: 3}
+  playerJumpSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
+  playerBounceSound: {fileID: 8300000, guid: e9d4a3661b5e4ea41b21e9bbe629c761, type: 3}
+  playerChargeSound: {fileID: 8300000, guid: 3320c318fce42f543b9ce32cb33d9e56, type: 3}
+--- !u!114 &6681397003507841659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c103c01fbc533d42bb44772b33eb99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckRadius: 0
+  slopeCheckDistance: 0
+  maxSlopeAngle: 0
+  groundCheck: {fileID: 954299037}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  noFriction: {fileID: 6200000, guid: 2269658afae0d2143a598f92a11a763c, type: 2}
+  fullFriction: {fileID: 6200000, guid: 9c472d53f880a54429754ff0450a8874, type: 2}
+  capsuleCollider: {fileID: 1946762727}
+  playerHealth: 3
+  playerSpeed: 5
+  playerMaxSpeed: 50
+  speedBoostFactor: 2
+  speedBoostDuration: 10
+  jumpForce: 5
+  playerMaxJumpSpeed: 50
+  chargeForce: 1.5
+  chargingMass: 0
+  chargeBoostDuration: 0.5
+  chargeBoostCooldown: 5
+--- !u!114 &4654297752094642867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c508188727d98047a8a95b3dc6087ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDir: {x: 0, y: 0}
 --- !u!70 &1946762727
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

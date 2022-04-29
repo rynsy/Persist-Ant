@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     public Camera cameraPrefab;
     public GameObject levelPrefab;
-    public PlayerController playerPrefab;
+    public PlayerManager playerPrefab;
 
     public Vector3 checkPoint;
 

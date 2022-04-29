@@ -5,22 +5,6 @@ public class Loader : MonoBehaviour
 {
     public GameObject gameManager;			//GameManager prefab to instantiate.
     public GameObject soundManager; 		//SoundManager prefab to instantiate.
-    
-    [SerializeField]
-    protected Transform trackingTarget;
-
-    [SerializeField]
-    float xOffset;
-
-    [SerializeField]
-    float yOffset;
-    // ...
-
-    void Update()
-    {
-        transform.position = new Vector3(trackingTarget.position.x + xOffset,
-            trackingTarget.position.y + yOffset, transform.position.z);
-    }
 
     void Awake ()
     {

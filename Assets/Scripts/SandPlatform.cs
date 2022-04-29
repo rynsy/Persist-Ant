@@ -28,7 +28,7 @@ public class SandPlatform : MonoBehaviour
                 SoundManager.instance.RandomizeSfx(dissolveSound1, dissolveSound2);
                 InvokeRepeating("Dissolve", dissolveDelay, dissolveTime);
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 Destroy(gameObject); 

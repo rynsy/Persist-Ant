@@ -41,7 +41,7 @@ public class WormController : MonoBehaviour
                 animatorComponent.SetTrigger("die");
                 blood.Play();
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 Kill();
@@ -69,7 +69,7 @@ public class WormController : MonoBehaviour
                 animatorComponent.SetTrigger("die");
                 blood.Play();
             }
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            PlayerManager player = collision.gameObject.GetComponent<PlayerManager>();
             if (player.isCharging)
             {
                 Kill();
